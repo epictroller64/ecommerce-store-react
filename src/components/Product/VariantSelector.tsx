@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ProductWithVariants, Variant } from '../../lib/interface/Products';
 import { formatPrice } from '../../lib/Utils';
+import { useCartStore } from '../../lib/stores/cartStore';
 
 interface VariantSelectorProps {
     product: ProductWithVariants;
@@ -23,6 +24,7 @@ interface VariantCombination {
 
 export function VariantSelector({ product, onVariantChange }: VariantSelectorProps) {
     const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+    const { addToCart } = useCartStore();
     const [variantData, setVariantData] = useState<SelectedVariantData | null>(null);
     const [selectedCombination, setSelectedCombination] = useState<VariantCombination>({});
     const groupedVariants = product.variants.reduce((acc, variant) => {
@@ -218,6 +220,7 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                         <button
                             className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                             disabled={!variantData.inStock}
+                            onClick={() => addToCart({ variant: selectedVariant!, quantity: 1 })}
                         >
                             {variantData.inStock ? 'Add to Cart' : 'Out of Stock'}
                         </button>

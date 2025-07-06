@@ -3,10 +3,12 @@ import Link from "next/link";
 import { useConfigContext } from "./ConfigProvider";
 import { useLanguage } from "../lib/i18n/LanguageProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useCartStore } from "../lib/stores/cartStore";
 
 export function NavBar() {
     const { config, loading } = useConfigContext();
     const { t } = useLanguage();
+    const { getCartCount } = useCartStore();
 
     if (loading) {
         return (
@@ -63,6 +65,17 @@ export function NavBar() {
 
                     <div className="flex items-center space-x-4">
                         <LanguageSwitcher variant="dropdown" />
+                        <Link href="/cart" className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01" />
+                            </svg>
+                            {t('navigation.cart')}
+                            {getCartCount() > 0 && (
+                                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-w-[1.25rem] h-5">
+                                    {getCartCount()}
+                                </span>
+                            )}
+                        </Link>
                     </div>
 
                     <div className="md:hidden">

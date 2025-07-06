@@ -4,6 +4,7 @@ export interface ProductWithPrice extends Product {
     price: number;
     currency: string;
     inStock: boolean;
+    images: string[]; // 2 Images for the product as we dont need more for the main page, handled by backend
 }
 
 export interface ProductWithVariants extends Product {
@@ -14,12 +15,12 @@ export interface Product {
     id: string;
     name: string;
     description: string;
-    images: string[];
     category: string;
     rating?: number;
     reviewCount?: number;
     createdAt: string;
     updatedAt: string;
+    sharedImages: boolean; // Whether the images are shared with own variants
 }
 
 export interface Variant {
@@ -31,6 +32,7 @@ export interface Variant {
     name: string;
     price: number;
     currency: string;
+    images: string[];
 }
 
 
