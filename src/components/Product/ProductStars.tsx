@@ -20,3 +20,9 @@ export function ProductStars({ rating }: { rating?: number }) {
 
     return stars;
 };
+
+export function ReviewCount({ reviewCount }: { reviewCount: number }) {
+    return <span className="text-sm text-gray-600">
+        {reviewCount} reviews
+    </span>
+}

@@ -1,20 +1,22 @@
 'use client'
 import React from 'react';
-import { Product } from '../../lib/interface/Products';
+import { ProductWithPrice } from '../../lib/interface/Products';
 import Image from 'next/image';
 import { ProductStars } from './ProductStars';
 import { formatPrice } from '../../lib/Utils';
+import { useRouter } from 'next/navigation';
 
 interface ProductItemProps {
-    product: Product;
+    product: ProductWithPrice;
 }
 
 function ProductItem({ product }: ProductItemProps) {
+    const router = useRouter();
     return (
         <div
             className="bg-white overflow-hidden  duration-300 cursor-pointer rounded-2xl"
             onClick={() => {
-                console.log(product)
+                router.push(`/product/${product.id}`)
             }}
         >
             <div className="relative group">

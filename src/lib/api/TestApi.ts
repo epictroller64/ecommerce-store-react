@@ -1,5 +1,6 @@
-import { ApiResponse, createSuccessResponse, SiteInfoResponse, ProductsResponse, AuthResponse } from "../interface/ApiResponse";
+import { ApiResponse, createSuccessResponse, SiteInfoResponse, ProductsResponse, AuthResponse, createErrorResponse } from "../interface/ApiResponse";
 import { Category } from "../interface/Category";
+import { ProductWithVariants } from "../interface/Products";
 import { SiteConfig } from "../interface/SiteConfig";
 import { exampleConfig } from "./config";
 
@@ -15,9 +16,312 @@ type ApiMethods = {
     "get-hero-images": () => Promise<ApiResponse<string[]>>;
     "get-config": () => Promise<ApiResponse<SiteConfig>>;
     "get-best-selling-products": () => Promise<ApiResponse<ProductsResponse>>;
+    "get-product": () => Promise<ApiResponse<ProductWithVariants>>;
 };
 
 export const TestApi: ApiMethods = {
+    "get-product": async () => {
+        const availableProducts = [
+            {
+                id: "prod-1",
+                name: "Premium Wireless Headphones",
+                description: "High-quality wireless headphones with noise cancellation and premium sound quality. Perfect for music lovers and professionals alike.",
+                images: [
+                    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    "https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                ],
+                category: "Electronics",
+                rating: 4.8,
+                reviewCount: 156,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                variants: [
+                    {
+                        id: "var-1",
+                        productId: "prod-1",
+                        name: "Black - Small",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Black",
+                        translationKey: "black",
+                    },
+                    {
+                        id: "var-2",
+                        productId: "prod-1",
+                        name: "Black - Medium",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Black",
+                        translationKey: "black",
+                    },
+                    {
+                        id: "var-3",
+                        productId: "prod-1",
+                        name: "Black - Large",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Black",
+                        translationKey: "black",
+                    },
+                    {
+                        id: "var-4",
+                        productId: "prod-1",
+                        name: "White - Small",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "White",
+                        translationKey: "white",
+                    },
+                    {
+                        id: "var-5",
+                        productId: "prod-1",
+                        name: "White - Medium",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "White",
+                        translationKey: "white",
+                    },
+                    {
+                        id: "var-6",
+                        productId: "prod-1",
+                        name: "White - Large",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "White",
+                        translationKey: "white",
+                    },
+                    {
+                        id: "var-7",
+                        productId: "prod-1",
+                        name: "Blue - Small",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Blue",
+                        translationKey: "blue",
+                    },
+                    {
+                        id: "var-8",
+                        productId: "prod-1",
+                        name: "Blue - Medium",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Blue",
+                        translationKey: "blue",
+                    },
+                    {
+                        id: "var-9",
+                        productId: "prod-1",
+                        name: "Blue - Large",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Blue",
+                        translationKey: "blue",
+                    },
+                    {
+                        id: "var-10",
+                        productId: "prod-1",
+                        name: "Black - Small",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Small",
+                        translationKey: "small",
+                    },
+                    {
+                        id: "var-11",
+                        productId: "prod-1",
+                        name: "Black - Medium",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Medium",
+                        translationKey: "medium",
+                    },
+                    {
+                        id: "var-12",
+                        productId: "prod-1",
+                        name: "Black - Large",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Large",
+                        translationKey: "large",
+                    },
+                    {
+                        id: "var-13",
+                        productId: "prod-1",
+                        name: "White - Small",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Small",
+                        translationKey: "small",
+                    },
+                    {
+                        id: "var-14",
+                        productId: "prod-1",
+                        name: "White - Medium",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Medium",
+                        translationKey: "medium",
+                    },
+                    {
+                        id: "var-15",
+                        productId: "prod-1",
+                        name: "White - Large",
+                        price: 129.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Large",
+                        translationKey: "large",
+                    },
+                    {
+                        id: "var-16",
+                        productId: "prod-1",
+                        name: "Blue - Small",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Small",
+                        translationKey: "small",
+                    },
+                    {
+                        id: "var-17",
+                        productId: "prod-1",
+                        name: "Blue - Medium",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Medium",
+                        translationKey: "medium",
+                    },
+                    {
+                        id: "var-18",
+                        productId: "prod-1",
+                        name: "Blue - Large",
+                        price: 139.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "Large",
+                        translationKey: "large",
+                    }
+                ]
+            },
+            {
+                id: "prod-2",
+                name: "Smart Fitness Watch",
+                description: "Advanced fitness tracking with heart rate monitoring, GPS, and 7-day battery life. Perfect for athletes and health enthusiasts.",
+                images: [
+                    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    "https://images.unsplash.com/photo-1544117519-31a4b719223d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                ],
+                category: "Electronics",
+                rating: 4.6,
+                reviewCount: 89,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                variants: [
+                    {
+                        id: "var-19",
+                        productId: "prod-2",
+                        name: "Silver - 40mm",
+                        price: 299.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Silver",
+                        translationKey: "silver",
+                    },
+                    {
+                        id: "var-20",
+                        productId: "prod-2",
+                        name: "Silver - 44mm",
+                        price: 329.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Silver",
+                        translationKey: "silver",
+                    },
+                    {
+                        id: "var-21",
+                        productId: "prod-2",
+                        name: "Black - 40mm",
+                        price: 299.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Black",
+                        translationKey: "black",
+                    },
+                    {
+                        id: "var-22",
+                        productId: "prod-2",
+                        name: "Black - 44mm",
+                        price: 329.99,
+                        currency: "USD",
+                        key: "color",
+                        label: "Black",
+                        translationKey: "black",
+                    },
+                    {
+                        id: "var-23",
+                        productId: "prod-2",
+                        name: "Silver - 40mm",
+                        price: 299.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "40mm",
+                        translationKey: "40mm",
+                    },
+                    {
+                        id: "var-24",
+                        productId: "prod-2",
+                        name: "Silver - 44mm",
+                        price: 329.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "44mm",
+                        translationKey: "44mm",
+                    },
+                    {
+                        id: "var-25",
+                        productId: "prod-2",
+                        name: "Black - 40mm",
+                        price: 299.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "40mm",
+                        translationKey: "40mm",
+                    },
+                    {
+                        id: "var-26",
+                        productId: "prod-2",
+                        name: "Black - 44mm",
+                        price: 329.99,
+                        currency: "USD",
+                        key: "size",
+                        label: "44mm",
+                        translationKey: "44mm",
+                    }
+                ]
+            }
+        ]
+        const product = availableProducts.find(p => p.id === "prod-1");
+        if (product) {
+            return Promise.resolve(createSuccessResponse(product, "Product retrieved successfully"));
+        }
+        return Promise.resolve(createErrorResponse("404", "Product not found"));
+    },
     "get-best-selling-products": async () => {
         return Promise.resolve(createSuccessResponse({
             products: [

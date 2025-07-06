@@ -1,10 +1,10 @@
 import React from 'react';
-import { Product } from '../../lib/interface/Products';
+import { ProductWithPrice } from '../../lib/interface/Products';
 import { ProductItem } from './ProductItem';
 import TranslatedText from '../Text';
 
 
-export default async function ProductCollection({ products, title }: { products: Product[], title: string }) {
+export default async function ProductCollection({ products, title }: { products: ProductWithPrice[], title: string }) {
     return (
         <div className="container py-8">
             <TranslatedText className="text-2xl font-bold text-gray-800 mb-6" textTag="h2">{title}</TranslatedText>

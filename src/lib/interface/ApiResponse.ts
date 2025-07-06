@@ -1,4 +1,4 @@
-import { Product, ProductFilters } from "./Products";
+import { ProductFilters, ProductWithPrice } from "./Products";
 import { Category } from "./Category";
 
 export interface ApiResponse<T = unknown> {
@@ -57,7 +57,7 @@ export interface UserInfo {
 export type UserRole = 'user' | 'admin' | 'moderator';
 
 export interface ProductsResponse {
-    products: Product[];
+    products: ProductWithPrice[];
     categories?: Category[];
     filters?: ProductFilters;
 }

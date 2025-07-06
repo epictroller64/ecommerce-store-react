@@ -1,5 +1,6 @@
 import { ApiResponse, ProductsResponse } from "../interface/ApiResponse"
 import { Category } from "../interface/Category"
+import { ProductWithVariants } from "../interface/Products"
 import { RegisterRequest } from "../interface/Request"
 import { SiteConfig } from "../interface/SiteConfig"
 import { SiteInfo } from "../interface/SiteInfo"
@@ -15,7 +16,8 @@ export const LocalApi = {
     getCategories: () => get<Category[]>("get-categories"),
     getHeroImages: () => get<string[]>("get-hero-images"),
     getConfig: () => get<SiteConfig>("get-config"),
-    getBestSellingProducts: () => get<ProductsResponse>("get-best-selling-products")
+    getBestSellingProducts: () => get<ProductsResponse>("get-best-selling-products"),
+    getProduct: (id: string) => get<ProductWithVariants>("get-product", { id }),
 }
 
 async function post<T, Req = unknown>(path: string, body: Req | FormData) {
