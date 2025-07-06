@@ -95,6 +95,7 @@ export const translations: LocalizedContent = {
             stars: 'stars',
             star: 'star',
             products: 'Products',
+            bestSelling: 'Best Selling Products',
         },
         cart: {
             title: 'Shopping Cart',
@@ -256,6 +257,7 @@ export const translations: LocalizedContent = {
             stars: 'estrellas',
             star: 'estrella',
             products: 'Productos',
+            bestSelling: 'Productos Más Vendidos',
         },
         cart: {
             title: 'Carrito de Compras',
@@ -417,6 +419,7 @@ export const translations: LocalizedContent = {
             stars: 'étoiles',
             star: 'étoile',
             products: 'Produits',
+            bestSelling: 'Meilleurs Vente',
         },
         cart: {
             title: 'Panier d\'Achat',

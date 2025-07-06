@@ -14,7 +14,8 @@ export const LocalApi = {
     getSiteInfo: () => get<SiteInfo>("get-site-info"),
     getCategories: () => get<Category[]>("get-categories"),
     getHeroImages: () => get<string[]>("get-hero-images"),
-    getConfig: () => get<SiteConfig>("get-config")
+    getConfig: () => get<SiteConfig>("get-config"),
+    getBestSellingProducts: () => get<ProductsResponse>("get-best-selling-products")
 }
 
 async function post<T, Req = unknown>(path: string, body: Req | FormData) {

@@ -14,9 +14,31 @@ type ApiMethods = {
     "get-categories": () => Promise<ApiResponse<Category[]>>;
     "get-hero-images": () => Promise<ApiResponse<string[]>>;
     "get-config": () => Promise<ApiResponse<SiteConfig>>;
+    "get-best-selling-products": () => Promise<ApiResponse<ProductsResponse>>;
 };
 
 export const TestApi: ApiMethods = {
+    "get-best-selling-products": async () => {
+        return Promise.resolve(createSuccessResponse({
+            products: [
+                {
+                    id: "prod-1",
+                    name: "Mock Product 1",
+                    description: "This is a mock product for testing",
+                    price: 29.99,
+                    currency: "USD",
+                    images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"],
+                    category: "Electronics",
+                    inStock: true,
+                    stockQuantity: 50,
+                    rating: 4.5,
+                    reviewCount: 12,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                }
+            ],
+        }, "Best selling products retrieved successfully"));
+    },
     "get-config": async () => {
         return Promise.resolve(createSuccessResponse(exampleConfig, "Config retrieved successfully"));
     },

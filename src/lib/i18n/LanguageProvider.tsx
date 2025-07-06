@@ -65,6 +65,7 @@ export function LanguageProvider({ children, initialLanguage }: LanguageProvider
             setCurrentLanguageState(languageCode);
             if (typeof window !== 'undefined') {
                 localStorage.setItem('preferred-language', languageCode);
+                document.cookie = `preferred-language=${languageCode}; path=/; max-age=31536000; samesite=lax; secure`;
             }
             document.documentElement.dir = language.rtl ? 'rtl' : 'ltr';
             document.documentElement.lang = languageCode;

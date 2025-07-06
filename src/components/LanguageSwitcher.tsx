@@ -41,8 +41,8 @@ export function LanguageSwitcher({ className = '', variant = 'dropdown' }: Langu
                         key={language.code}
                         onClick={() => handleLanguageChange(language.code)}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${currentLanguage === language.code
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                         title={language.nativeName}
                     >
