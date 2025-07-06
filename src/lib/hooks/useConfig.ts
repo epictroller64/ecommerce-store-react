@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { SiteConfig } from '../interface/SiteConfig';
 import { LocalApi } from '../api/LocalApi';
+import { translateConfig, TranslatedSiteConfig } from '../utils/configTranslator';
+import { useLanguage } from '../i18n/LanguageProvider';
 
 interface UseConfigReturn {
-    config: SiteConfig | null;
+    config: TranslatedSiteConfig | null;
     loading: boolean;
     error: string | null;
     refresh: () => Promise<void>;
@@ -11,8 +13,10 @@ interface UseConfigReturn {
 
 export function useConfig(): UseConfigReturn {
     const [config, setConfig] = useState<SiteConfig | null>(null);
+    const [translatedConfig, setTranslatedConfig] = useState<TranslatedSiteConfig | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { t } = useLanguage();
 
     const fetchConfig = useCallback(async () => {
         try {
@@ -39,12 +43,20 @@ export function useConfig(): UseConfigReturn {
         fetchConfig();
     }, [fetchConfig]);
 
-    return { config, loading, error, refresh };
+    // Translate config when it changes or when translation function changes
+    useEffect(() => {
+        if (config && t) {
+            const translated = translateConfig(config, t);
+            setTranslatedConfig(translated);
+        }
+    }, [config, t]);
+
+    return { config: translatedConfig, loading, error, refresh };
 }
 
-export function useConfigSection<T extends keyof SiteConfig>(
+export function useConfigSection<T extends keyof TranslatedSiteConfig>(
     section: T
-): { data: SiteConfig[T] | null; loading: boolean; error: string | null } {
+): { data: TranslatedSiteConfig[T] | null; loading: boolean; error: string | null } {
     const { config, loading, error } = useConfig();
 
     return {

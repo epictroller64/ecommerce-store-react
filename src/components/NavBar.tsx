@@ -51,15 +51,11 @@ export function NavBar() {
 
                     <div className="hidden md:block">
                         <div className="ml-10 flex items-baseline space-x-4">
-                            <Link href="/" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
-                                {t('navigation.home')}
-                            </Link>
-                            <Link href="/products" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
-                                {t('navigation.products')}
-                            </Link>
-                            <Link href="/login" className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
-                                {t('navigation.login')}
-                            </Link>
+                            {config?.navigation.mainMenu.map((item) => (
+                                <Link key={item.id} href={item.url} className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
+                                    {item.label}
+                                </Link>
+                            ))}
                         </div>
                     </div>
 

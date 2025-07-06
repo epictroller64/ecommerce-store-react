@@ -6,7 +6,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { Styles } from '../../lib/Style';
 import { useHero } from '../../lib/hooks/useConfig';
 import { useLanguage } from '../../lib/i18n/LanguageProvider';
-import { HeroConfig } from '../../lib/interface/SiteConfig';
 
 export default function Hero() {
     const { data: heroConfig, loading } = useHero();
@@ -122,7 +121,7 @@ export default function Hero() {
 }
 
 
-const HeroContent = ({ config }: { config: HeroConfig }) => {
+const HeroContent = ({ config }: { config: { title: string; subtitle: string; images: string[]; autoPlay: boolean; autoPlayInterval: number } }) => {
     return <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
             initial={{ opacity: 0, y: 50 }}

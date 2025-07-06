@@ -3,8 +3,8 @@ import { LanguageConfig } from './Language';
 
 
 export interface HeroConfig {
-    title: string;
-    subtitle: string;
+    titleTranslationKey: string;
+    subtitleTranslationKey: string;
     images: string[];
     autoPlay: boolean;
     autoPlayInterval: number;
@@ -15,7 +15,7 @@ export interface SiteConfig {
     // Basic site info
     siteInfo: {
         name: string;
-        description: string;
+        descriptionTranslationKey: string;
         logo: string;
         favicon: string;
         domain: string;
@@ -29,14 +29,14 @@ export interface SiteConfig {
         hero: HeroConfig;
         featured: {
             enabled: boolean;
-            title: string;
-            subtitle: string;
+            titleTranslationKey: string;
+            subtitleTranslationKey: string;
             productIds: string[];
         };
         categories: {
             enabled: boolean;
-            title: string;
-            subtitle: string;
+            titleTranslationKey: string;
+            subtitleTranslationKey: string;
             featuredCategories: string[];
         };
     };
@@ -61,8 +61,8 @@ export interface SiteConfig {
 
     // SEO configuration
     seo: {
-        title: string;
-        description: string;
+        titleTranslationKey: string;
+        descriptionTranslationKey: string;
         keywords: string[];
         ogImage: string;
         canonicalUrl: string;
@@ -105,6 +105,7 @@ export interface MenuItem {
     children?: MenuItem[];
     icon?: string;
     external?: boolean;
+    translationKey: string;
 }
 
 export interface FooterLink {
@@ -112,6 +113,7 @@ export interface FooterLink {
     label: string;
     url: string;
     external?: boolean;
+    translationKey: string;
 }
 
 export interface SocialLink {
@@ -123,15 +125,15 @@ export interface SocialLink {
 
 export interface ShippingMethod {
     id: string;
-    name: string;
+    nameTranslationKey: string;
     price: number;
-    estimatedDays: string;
+    estimatedDaysTranslationKey: string;
     enabled: boolean;
 }
 
 export interface PaymentMethod {
     id: string;
-    name: string;
+    nameTranslationKey: string;
     icon: string;
     enabled: boolean;
     processingFee?: number;

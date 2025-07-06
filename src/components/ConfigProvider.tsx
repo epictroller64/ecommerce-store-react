@@ -1,12 +1,12 @@
 "use client"
 import { createContext, useContext, ReactNode } from 'react';
 import { useConfig } from '../lib/hooks/useConfig';
-import { SiteConfig } from '../lib/interface/SiteConfig';
+import { TranslatedSiteConfig } from '../lib/utils/configTranslator';
 import { ResponsiveStyles } from '../lib/Style';
 import { LanguageProvider } from '../lib/i18n/LanguageProvider';
 
 interface ConfigContextType {
-    config: SiteConfig | null;
+    config: TranslatedSiteConfig | null;
     loading: boolean;
     error: string | null;
     refresh: () => Promise<void>;

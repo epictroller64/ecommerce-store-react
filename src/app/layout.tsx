@@ -4,6 +4,7 @@ import "./globals.css";
 import { NavBar } from "../components/NavBar";
 import { ConfigProvider } from "../components/ConfigProvider";
 import { LocalApi } from "../lib/api/LocalApi";
+import { LanguageProvider } from "../lib/i18n/LanguageProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
     if (config.success && config.data) {
       return {
         title: config.data.siteInfo.name,
-        description: config.data.siteInfo.description,
+        description: config.data.siteInfo.descriptionTranslationKey,
         keywords: config.data.seo.keywords,
         openGraph: {
-          title: config.data.seo.title,
-          description: config.data.seo.description,
+          title: config.data.seo.titleTranslationKey,
+          description: config.data.seo.descriptionTranslationKey,
           images: [config.data.seo.ogImage],
         },
       };
@@ -45,10 +46,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <ConfigProvider>
-          <NavBar />
-          {children}
-        </ConfigProvider>
+        <LanguageProvider>
+
+          <ConfigProvider>
+            <NavBar />
+            {children}
+          </ConfigProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
