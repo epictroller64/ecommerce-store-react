@@ -15,8 +15,6 @@ export const exampleConfig: SiteConfig = {
         ...defaultTheme,
         colors: {
             ...defaultTheme.colors,
-            primary: '#FF6B35',
-            accent: '#4ECDC4',
         },
     },
     content: {

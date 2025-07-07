@@ -1,22 +1,25 @@
+'use client'
+import { ComponentStyles } from "../../lib/styles/componentStyles";
+import TranslatedText from "../Text";
 
 export default function ShopFeatures({ features }: { features: ShopFeature[] }) {
     return (
-        <div className="w-full bg-gray-50 py-16">
+        <div className={`${ComponentStyles.shopFeatures.container} w-full bg-gray-50`}>
             <div className="mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-row gap-4 justify-between">
+                <div className={ComponentStyles.shopFeatures.internalContainer}>
                     {features.map((feature) => (
-                        <div key={feature.title} className="text-center">
-                            <div className="flex justify-center mb-4">
-                                <div className="text-2xl text-blue-600">
+                        <div key={feature.title} className={`${ComponentStyles.shopFeatures.feature.container}`}>
+                            <div className="flex justify-center mb-2">
+                                <div className={ComponentStyles.shopFeatures.feature.icon}>
                                     {feature.icon}
                                 </div>
                             </div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                            <TranslatedText className={ComponentStyles.shopFeatures.feature.title} textTag="h3">
                                 {feature.title}
-                            </h3>
-                            <p className="text-gray-600">
+                            </TranslatedText>
+                            <TranslatedText className={ComponentStyles.shopFeatures.feature.description} textTag="p">
                                 {feature.description}
-                            </p>
+                            </TranslatedText>
                         </div>
                     ))}
                 </div>
@@ -24,8 +27,6 @@ export default function ShopFeatures({ features }: { features: ShopFeature[] }) 
         </div>
     )
 }
-
-
 
 export type ShopFeature = {
     title: string

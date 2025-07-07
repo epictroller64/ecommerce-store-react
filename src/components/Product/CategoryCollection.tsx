@@ -1,4 +1,5 @@
 import { LocalApi } from "../../lib/api/LocalApi";
+import { ComponentStyles } from "../../lib/styles/componentStyles";
 import TranslatedText from "../Text";
 import CategoryItem from "./CategoryItem";
 
@@ -8,7 +9,7 @@ export default async function CategoryCollection() {
         return (
             <div>
                 <TranslatedText className="text-2xl font-bold mb-4" textTag="h2">products.categories</TranslatedText>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className={ComponentStyles.categoryCollection.container}>
                     {categories.data?.map((category) => (
                         <CategoryItem key={category.id} category={category} />
                     ))}

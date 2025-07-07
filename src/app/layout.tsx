@@ -45,12 +45,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased overflow-x-hidden`}>
         <LanguageProvider>
-
           <ConfigProvider>
             <NavBar />
-            {children}
+            <div className="min-h-screen">
+              {children}
+            </div>
           </ConfigProvider>
         </LanguageProvider>
       </body>

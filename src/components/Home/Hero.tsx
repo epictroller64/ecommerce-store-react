@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import { Styles } from '../../lib/Style';
+import { ComponentStyles } from '../../lib/styles/componentStyles';
 import { useHero } from '../../lib/hooks/useConfig';
 import { useLanguage } from '../../lib/i18n/LanguageProvider';
 
@@ -45,8 +45,8 @@ export default function Hero() {
 
     if (loading) {
         return (
-            <div className={`relative w-full ${Styles.heroHeight} overflow-hidden bg-gray-200 animate-pulse`}>
-                <div className="absolute inset-0 flex items-center justify-center">
+            <div className={`relative w-full ${ComponentStyles.hero.container} bg-gray-200 animate-pulse`}>
+                <div className={ComponentStyles.hero.content}>
                     <div className="text-center">
                         <div className="h-8 bg-gray-300 rounded mb-4 w-64"></div>
                         <div className="h-4 bg-gray-300 rounded w-96"></div>
@@ -57,7 +57,7 @@ export default function Hero() {
     }
 
     return (
-        <div className={`relative w-full ${Styles.heroHeight} overflow-hidden`}>
+        <div className={`relative w-full ${ComponentStyles.hero.container}`}>
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentIndex}
@@ -82,7 +82,7 @@ export default function Hero() {
 
             <button
                 onClick={prevSlide}
-                className="absolute z-10 left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
+                className={`${ComponentStyles.hero.navigation.button} ${ComponentStyles.hero.navigation.left}`}
                 aria-label="Previous slide"
             >
                 <ChevronLeftIcon className="w-6 h-6" />
@@ -90,20 +90,20 @@ export default function Hero() {
 
             <button
                 onClick={nextSlide}
-                className="absolute z-10 right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
+                className={`${ComponentStyles.hero.navigation.button} ${ComponentStyles.hero.navigation.right}`}
                 aria-label="Next slide"
             >
                 <ChevronRightIcon className="w-6 h-6" />
             </button>
 
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            <div className={ComponentStyles.hero.navigation.dots}>
                 {config.images.map((_, index: number) => (
                     <motion.button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                            ? 'bg-white'
-                            : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                        className={`${ComponentStyles.hero.navigation.dot} ${index === currentIndex
+                            ? ComponentStyles.hero.navigation.dotActive
+                            : ComponentStyles.hero.navigation.dotInactive
                             }`}
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
@@ -120,19 +120,18 @@ export default function Hero() {
     );
 }
 
-
 const HeroContent = ({ config }: { config: { title: string; subtitle: string; images: string[]; autoPlay: boolean; autoPlayInterval: number } }) => {
-    return <div className="absolute inset-0 flex items-center justify-center">
+    return <div className={ComponentStyles.hero.content}>
         <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-center text-white"
         >
-            <h1 className={`${Styles.heroHeading} mb-4`}>
+            <h1 className={`${ComponentStyles.hero.heading} mb-4`}>
                 {config.title}
             </h1>
-            <p className={`${Styles.heroSubheading} max-w-2xl mx-auto px-4`}>
+            <p className={`${ComponentStyles.hero.subheading} max-w-2xl mx-auto px-4`}>
                 {config.subtitle}
             </p>
         </motion.div>

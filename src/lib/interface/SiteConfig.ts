@@ -23,7 +23,6 @@ export interface SiteConfig {
 
     // Theme configuration
     theme: ThemeConfig;
-
     // Content configuration
     content: {
         hero: HeroConfig;

@@ -3,6 +3,7 @@ import { SiteConfig } from '../interface/SiteConfig';
 import { LocalApi } from '../api/LocalApi';
 import { translateConfig, TranslatedSiteConfig } from '../utils/configTranslator';
 import { useLanguage } from '../i18n/LanguageProvider';
+import { ThemeConfig } from '../Style';
 
 interface UseConfigReturn {
     config: TranslatedSiteConfig | null;
@@ -29,7 +30,9 @@ export function useConfig(): UseConfigReturn {
                 setError(fetchedConfig.error?.message || 'Failed to load configuration');
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to load configuration');
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load configuration';
+            setError(errorMessage);
+            console.error('Config fetch error:', err);
         } finally {
             setLoading(false);
         }
@@ -43,15 +46,56 @@ export function useConfig(): UseConfigReturn {
         fetchConfig();
     }, [fetchConfig]);
 
-    // Translate config when it changes or when translation function changes
     useEffect(() => {
         if (config && t) {
             const translated = translateConfig(config, t);
             setTranslatedConfig(translated);
+        } else if (config && !t) {
+            //console.log('Config available but no translation function yet');
         }
     }, [config, t]);
 
     return { config: translatedConfig, loading, error, refresh };
+}
+
+// separated hook for theme otherwise its gonna loop with the config hook
+export function useTheme() {
+    const [theme, setTheme] = useState<ThemeConfig | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchTheme = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                console.log('Fetching theme...');
+                const fetchedConfig = await LocalApi.getConfig();
+                console.log('Fetched config for theme:', fetchedConfig);
+                if (fetchedConfig.success && fetchedConfig.data) {
+                    setTheme(fetchedConfig.data.theme);
+                    console.log('Theme set:', fetchedConfig.data.theme);
+                } else {
+                    setError(fetchedConfig.error?.message || 'Failed to load theme');
+                    console.error('Theme fetch failed:', fetchedConfig.error);
+                }
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Failed to load theme';
+                setError(errorMessage);
+                console.error('Theme fetch error:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTheme();
+    }, []);
+
+    return {
+        data: theme,
+        loading,
+        error,
+    };
 }
 
 export function useConfigSection<T extends keyof TranslatedSiteConfig>(
@@ -64,10 +108,6 @@ export function useConfigSection<T extends keyof TranslatedSiteConfig>(
         loading,
         error,
     };
-}
-
-export function useTheme() {
-    return useConfigSection('theme');
 }
 
 export function useContent() {

@@ -4,17 +4,23 @@ import { useConfigContext } from "./ConfigProvider";
 import { useLanguage } from "../lib/i18n/LanguageProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useCartStore } from "../lib/stores/cartStore";
+import { HiOutlineShoppingCart } from "react-icons/hi";
+import Button from "./UI/Button";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ComponentStyles } from "../lib/styles/componentStyles";
 
 export function NavBar() {
     const { config, loading } = useConfigContext();
     const { t } = useLanguage();
     const { getCartCount } = useCartStore();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     if (loading) {
         return (
-            <nav className="bg-white shadow-sm border-b">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+            <nav className={ComponentStyles.navbar.container}>
+                <div className={ComponentStyles.navbar.content}>
+                    <div className={ComponentStyles.navbar.header}>
                         <div className="flex-shrink-0">
                             <div className="h-6 w-32 bg-gray-200 rounded animate-pulse"></div>
                         </div>
@@ -40,46 +46,51 @@ export function NavBar() {
     };
 
     return (
-        <nav className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
-                    <div className="flex-shrink-0">
-                        <Link href="/" className="text-xl font-bold text-gray-900">
+        <nav className={ComponentStyles.navbar.container}>
+            <div className={ComponentStyles.navbar.content}>
+                <div className={ComponentStyles.navbar.header}>
+                    <div className="flex-shrink-0 md:block hidden">
+                        <Link href="/" className={ComponentStyles.navbar.logo}>
                             {siteInfo.name}
                         </Link>
                     </div>
 
-                    <div className="hidden md:block">
-                        <div className="ml-10 flex items-baseline space-x-4">
+                    <div className={ComponentStyles.navbar.desktopMenu}>
+                        <div className={ComponentStyles.navbar.desktopMenuItems}>
                             {config?.navigation.mainMenu.map((item) => (
-                                <Link key={item.id} href={item.url} className="text-gray-900 hover:text-gray-600 px-3 py-2 text-sm font-medium">
+                                <NavButton key={item.id} href={item.url}>
                                     {item.label}
-                                </Link>
+                                </NavButton>
                             ))}
                         </div>
                     </div>
 
-                    <div className="flex items-center space-x-4">
-                        <LanguageSwitcher variant="dropdown" />
-                        <Link href="/cart" className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01" />
-                            </svg>
-                            {t('navigation.cart')}
+                    <div className="flex items-center space-x-2 sm:space-x-4">
+                        <div className="hidden sm:block">
+                            <LanguageSwitcher variant="dropdown" />
+                        </div>
+                        <Link
+                            href="/cart"
+                            className={ComponentStyles.navbar.cartButton}
+                        >
+                            <HiOutlineShoppingCart className={ComponentStyles.navbar.cartIcon} />
+                            <span className="hidden sm:inline">{t('navigation.cart')}</span>
                             {getCartCount() > 0 && (
-                                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full min-w-[1.25rem] h-5">
+                                <span className={ComponentStyles.navbar.cartBadge}>
                                     {getCartCount()}
                                 </span>
                             )}
                         </Link>
                     </div>
 
-                    <div className="md:hidden">
+                    <div className={ComponentStyles.navbar.mobileMenu}>
+                        <div className="sm:hidden">
+                            <LanguageSwitcher variant="dropdown" />
+                        </div>
                         <button
                             type="button"
-                            className="text-gray-900 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-                            onClick={() => {
-                            }}
+                            className={ComponentStyles.navbar.mobileMenuButton}
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -88,20 +99,36 @@ export function NavBar() {
                     </div>
                 </div>
 
-                <div className="md:hidden hidden" id="mobile-menu">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <Link href="/" className="text-gray-900 hover:text-gray-600 block px-3 py-2 text-base font-medium">
-                            {t('navigation.home')}
-                        </Link>
-                        <a href="/products" className="text-gray-900 hover:text-gray-600 block px-3 py-2 text-base font-medium">
-                            {t('navigation.products')}
-                        </a>
-                        <a href="/login" className="text-gray-900 hover:text-gray-600 block px-3 py-2 text-base font-medium">
-                            {t('navigation.login')}
-                        </a>
+                <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: isMobileMenuOpen ? 'auto' : 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className={ComponentStyles.navbar.mobileMenuContent}
+                >
+                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
+                        {config?.navigation.mainMenu.map((item) => (
+                            <Link
+                                key={item.id}
+                                href={item.url}
+                                className={ComponentStyles.navbar.mobileMenuItem}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </nav>
     );
+}
+
+const NavButton = ({ href, children }: { href: string, children: React.ReactNode }) => {
+    return (
+        <Button variant="ghost" size="sm">
+            <Link href={href}>
+                {children}
+            </Link>
+        </Button>
+    )
 }

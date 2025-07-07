@@ -3,6 +3,10 @@ import { CartItem, useCartStore } from "../../lib/stores/cartStore";
 import { useLanguage } from "../../lib/i18n/LanguageProvider";
 import Link from "next/link";
 import Image from "next/image";
+import { HiOutlineShoppingCart } from "react-icons/hi";
+import Button, { RoundedButton } from "../../components/UI/Button";
+import Minus from "../../components/SVG/Minus";
+import Plus from "../../components/SVG/Plus";
 
 export default function CartPage() {
     const { t } = useLanguage();
@@ -38,9 +42,7 @@ export default function CartPage() {
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center py-16">
                         <div className="mx-auto h-24 w-24 text-gray-400 mb-4">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 10-4 0v4.01" />
-                            </svg>
+                            <HiOutlineShoppingCart className="w-full h-full" />
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900 mb-2">
                             {t('cart.empty.title') || 'Your cart is empty'}
@@ -48,12 +50,13 @@ export default function CartPage() {
                         <p className="text-gray-600 mb-8">
                             {t('cart.empty.description') || 'Add some products to get started'}
                         </p>
-                        <Link
-                            href="/products"
-                            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                        >
-                            {t('cart.empty.shopNow') || 'Shop Now'}
-                        </Link>
+                        <Button variant="primary" size="lg">
+                            <Link
+                                href="/products"
+                            >
+                                {t('cart.empty.shopNow') || 'Shop Now'}
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -110,38 +113,35 @@ export default function CartPage() {
                                     </div>
 
                                     <div className="flex items-center space-x-2">
-                                        <button
+                                        <RoundedButton
                                             onClick={() => handleQuantityChange(item, item.quantity - 1)}
-                                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
                                             disabled={item.quantity <= 1}
+                                            size="md"
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                                            </svg>
-                                        </button>
+                                            <Minus />
+                                        </RoundedButton>
                                         <span className="w-12 text-center font-medium">
                                             {item.quantity}
                                         </span>
-                                        <button
+                                        <RoundedButton
                                             onClick={() => handleQuantityChange(item, item.quantity + 1)}
-                                            className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            size="md"
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                            </svg>
-                                        </button>
+                                            <Plus></Plus>
+                                        </RoundedButton>
                                     </div>
 
                                     <div className="text-right">
                                         <p className="text-lg font-semibold text-gray-900">
                                             {formatPrice(item.variant.price * item.quantity)}
                                         </p>
-                                        <button
+                                        <Button
+                                            variant="ghost"
                                             onClick={() => removeFromCart(item.variant)}
                                             className="text-red-600 hover:text-red-800 text-sm mt-1 transition-colors"
                                         >
                                             {t('cart.remove') || 'Remove'}
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             ))}
@@ -150,12 +150,13 @@ export default function CartPage() {
 
                     <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
                         <div className="flex items-center justify-between mb-4">
-                            <button
+                            <Button
+                                variant="ghost"
                                 onClick={clearCart}
                                 className="text-red-600 hover:text-red-800 text-sm font-medium transition-colors"
                             >
                                 {t('cart.clearAll') || 'Clear Cart'}
-                            </button>
+                            </Button>
                             <div className="text-right">
                                 <p className="text-sm text-gray-600">
                                     {t('cart.total') || 'Total'}
@@ -167,18 +168,20 @@ export default function CartPage() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <Link
-                                href="/products"
-                                className="flex-1 inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                            >
-                                {t('cart.continueShopping') || 'Continue Shopping'}
-                            </Link>
-                            <Link
-                                href="/checkout"
-                                className="flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                            >
-                                {t('cart.checkout') || 'Proceed to Checkout'}
-                            </Link>
+                            <Button variant="primary" size="lg">
+                                <Link
+                                    href="/checkout"
+                                >
+                                    {t('cart.checkout') || 'Proceed to Checkout'}
+                                </Link>
+                            </Button>
+                            <Button variant="secondary" size="lg">
+                                <Link
+                                    href="/products"
+                                >
+                                    {t('cart.continueShopping') || 'Continue Shopping'}
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
