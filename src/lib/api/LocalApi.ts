@@ -1,16 +1,19 @@
-import { ApiResponse, ProductsResponse } from "../interface/ApiResponse"
+import { ApiResponse, AuthResponse, ProductsResponse } from "../interface/ApiResponse"
 import { Category } from "../interface/Category"
 import { ProductWithVariants } from "../interface/Products"
-import { RegisterRequest } from "../interface/Request"
+import { LoginRequest, RegisterRequest } from "../interface/Request"
 import { SiteConfig } from "../interface/SiteConfig"
 import { SiteInfo } from "../interface/SiteInfo"
 import { Path, TestApi } from "./TestApi"
+
+// All endpoints will be proxied by Next API as I dont want to expose the backend to the client
 
 const API_PATH = "http://localhost:8080"
 const TEST = true
 
 export const LocalApi = {
-    registerUser: (request: RegisterRequest) => post("register-user", request),
+    registerUser: (request: RegisterRequest) => post<AuthResponse>("register-user", request),
+    loginUser: (request: LoginRequest) => post<AuthResponse>("login-user", request),
     getProducts: () => get<ProductsResponse>("get-products"),
     getSiteInfo: () => get<SiteInfo>("get-site-info"),
     getCategories: () => get<Category[]>("get-categories"),
@@ -23,7 +26,8 @@ export const LocalApi = {
 async function post<T, Req = unknown>(path: string, body: Req | FormData) {
     try {
         if (TEST) {
-            return TestApi[path as Path]()
+            const result = await TestApi[path as Path]()
+            return result as ApiResponse<T>
         } else {
             let fetchOptions: RequestInit;
             if (body instanceof FormData) {

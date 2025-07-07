@@ -66,8 +66,8 @@ export default function CartPage() {
     return (
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white rounded-lg shadow-sm">
-                    <div className="px-6 py-4 border-b border-gray-200">
+                <div className="rounded-lg">
+                    <div className="px-6 py-4 ">
                         <div className="flex items-center justify-between">
                             <h1 className="text-2xl font-bold text-gray-900">
                                 {t('cart.title') || 'Shopping Cart'}
@@ -78,10 +78,10 @@ export default function CartPage() {
                         </div>
                     </div>
 
-                    <div className="px-6 py-4">
+                    <div className="px-6 py-4 rounded-lg bg-white">
                         <div className="space-y-4">
                             {cart.map((item) => (
-                                <div key={item.variant.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
+                                <div key={item.variant.id} className="flex items-center space-x-4 py-4">
                                     <div className="flex-shrink-0">
                                         {item.variant.images[0] ? (
                                             <Image
@@ -148,7 +148,7 @@ export default function CartPage() {
                         </div>
                     </div>
 
-                    <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                    <div className="px-6 py-4  bg-gray-50">
                         <div className="flex items-center justify-between mb-4">
                             <Button
                                 variant="ghost"

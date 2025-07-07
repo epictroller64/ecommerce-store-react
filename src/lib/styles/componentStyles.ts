@@ -137,5 +137,41 @@ export const ComponentStyles = {
         skeletonImage: "w-full h-32 bg-gray-200 rounded",
         skeletonButton: "h-10 bg-gray-200 rounded",
         spinner: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"
+    },
+
+    auth: {
+        container: "min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8",
+        card: "max-w-md w-full bg-white rounded-xl p-8",
+        header: {
+            container: "text-center mb-8",
+            title: "text-3xl font-bold text-gray-900 mb-2",
+            subtitle: "text-gray-600 text-sm"
+        },
+        tabs: {
+            container: "flex mb-8 bg-gray-100 rounded-lg p-1",
+            tab: "flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 hover:cursor-pointer",
+            tabActive: "bg-white text-blue-600 shadow-sm",
+            tabInactive: "text-gray-600 hover:text-gray-900"
+        },
+        form: {
+            container: "space-y-6",
+            group: "space-y-2",
+            label: "block text-sm font-medium text-gray-700",
+            input: "w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors",
+            inputError: "w-full px-4 py-3 border border-red-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors",
+            error: "text-red-500 text-sm mt-1",
+            success: "text-green-500 text-sm mt-1",
+            submitButton: "w-full mt-6"
+        },
+        divider: {
+            container: "relative my-6",
+            line: "absolute inset-0 flex items-center",
+            lineInner: "w-full border-t border-gray-300",
+            text: "relative flex justify-center text-sm"
+        },
+        social: {
+            container: "mt-6",
+            button: "w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        }
     }
 }; 
