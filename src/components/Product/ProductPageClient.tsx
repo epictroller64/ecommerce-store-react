@@ -7,6 +7,7 @@ import { VariantSelector } from "./VariantSelector";
 
 export default function ProductPageClient({ productData }: { productData: ProductWithVariants }) {
     const [selectedVariant, setSelectedVariant] = useState<Variant>(productData.variants[0]);
+
     return <>
         <Gallery variant={selectedVariant} />
         <div className="space-y-6">

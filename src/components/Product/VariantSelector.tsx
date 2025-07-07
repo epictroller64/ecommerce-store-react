@@ -3,6 +3,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ProductWithVariants, Variant } from '../../lib/interface/Products';
 import { formatPrice } from '../../lib/Utils';
 import { useCartStore } from '../../lib/stores/cartStore';
+import { useLikedStore } from '../../lib/stores/likedStore';
+import { HiOutlineHeart } from 'react-icons/hi';
+import Button from '../UI/Button';
+import Badge from '../UI/Badge';
 
 interface VariantSelectorProps {
     product: ProductWithVariants;
@@ -25,6 +29,19 @@ interface VariantCombination {
 export function VariantSelector({ product, onVariantChange }: VariantSelectorProps) {
     const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
     const { addToCart } = useCartStore();
+    const { addToLiked, removeFromLiked, isLiked: _isLiked } = useLikedStore();
+    const handleLiked = () => {
+        if (selectedVariant) {
+            if (isLiked) {
+                removeFromLiked(selectedVariant);
+            } else {
+                addToLiked({ variant: selectedVariant });
+            }
+        }
+    }
+    const isLiked = selectedVariant ? _isLiked(selectedVariant) : false;
+
+
     const [variantData, setVariantData] = useState<SelectedVariantData | null>(null);
     const [selectedCombination, setSelectedCombination] = useState<VariantCombination>({});
     const groupedVariants = product.variants.reduce((acc, variant) => {
@@ -104,6 +121,7 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
         return `${baseClass} border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50`;
     };
 
+    //Currently special button only for color variants
     const renderVariantButton = (variant: Variant, isSelected: boolean) => {
         const isColor = variant.key.toLowerCase() === 'color';
         return (
@@ -164,12 +182,7 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                     </div>
 
                     <div className="flex items-center space-x-2">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantData.inStock
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
-                            }`}>
-                            {variantData.inStock ? 'In Stock' : 'Out of Stock'}
-                        </span>
+                        <Badge keyValue="Status" label={variantData.inStock ? 'In Stock' : 'Out of Stock'} color={variantData.inStock ? 'green' : 'red'} />
                     </div>
                 </div>
             )}
@@ -197,9 +210,7 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                     <h4 className="text-sm font-medium text-blue-900 mb-2">Selected Options:</h4>
                     <div className="flex flex-wrap gap-2">
                         {Object.entries(selectedCombination).map(([key, label]) => (
-                            <span key={key} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {key}: {label}
-                            </span>
+                            <Badge key={key} label={label} color="blue" keyValue={key} />
                         ))}
                     </div>
                 </div>
@@ -217,18 +228,21 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                     </div>
 
                     <div className="flex space-x-3">
-                        <button
-                            className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        <Button
+                            variant="primary"
+                            size="lg"
                             disabled={!variantData.inStock}
                             onClick={() => addToCart({ variant: selectedVariant!, quantity: 1 })}
                         >
                             {variantData.inStock ? 'Add to Cart' : 'Out of Stock'}
-                        </button>
-                        <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </button>
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={handleLiked}
+                        >
+                            <HiOutlineHeart fill={isLiked ? 'black' : 'none'} className="w-8 h-8" />
+                        </Button>
                     </div>
                 </div>
             )}
