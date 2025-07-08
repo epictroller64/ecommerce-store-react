@@ -129,3 +129,11 @@ export const createPaginatedResponse = <T>(
         pagination,
     },
 });
+
+
+export interface CompleteCheckoutResponse {
+    orderId: string;
+    totalPrice: number;
+    deliveryMethodId: string;
+    paymentMethodId: string;
+}

@@ -3,22 +3,33 @@ import { cookies } from "next/headers";
 import { LocalApi } from "../api/LocalApi";
 import { loginUserSchema, registerUserSchema } from "../schemas/zodSchemas";
 import z from "zod";
+import { redirect } from "next/navigation";
+import { ApiResponse, createErrorResponse, createSuccessResponse } from "../interface/ApiResponse";
+import { AuthResponse } from "../interface/ApiResponse";
+import { createAction } from "./action";
 
-export async function loginUser(data: z.infer<typeof loginUserSchema>) {
-    const validatedData = loginUserSchema.safeParse(data);
-    // backend sends translation keys as error message
-    if (!validatedData.success) {
-        return { error: validatedData.error.message, success: false };
-    }
-    const response = await LocalApi.loginUser(validatedData.data);
+export async function logoutUser() {
+    const cookieStore = await cookies();
+    cookieStore.delete("token");
+    cookieStore.delete("refreshToken");
+    redirect("/");
+}
+
+export const loginUser = createAction(loginUserSchema, async (parsedInput: z.infer<typeof loginUserSchema>): Promise<ApiResponse<AuthResponse>> => {
+    const response = await LocalApi.loginUser(parsedInput);
     if (response.error) {
-        return { error: response.error, success: false };
-    }
-    if (!response.data) {
-        return { error: "No data received from server", success: false };
+        return createErrorResponse("400", "auth.loginFailed", {
+            details: response.error
+        });
     }
 
-    //Set httponly cookie
+    if (!response.data) {
+        return createErrorResponse("400", "auth.noDataReceived", {
+            details: "No data received from server"
+        });
+    }
+
+    // Set httpOnly cookie
     const cookieStore = await cookies();
     cookieStore.set("token", response.data.token, {
         httpOnly: true,
@@ -29,27 +40,25 @@ export async function loginUser(data: z.infer<typeof loginUserSchema>) {
         secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-    return { success: true, error: null };
-}
 
+    return createSuccessResponse(response.data, "auth.loginSuccess");
+});
 
-export async function registerUser(data: z.infer<typeof registerUserSchema>) {
-    const validatedData = registerUserSchema.safeParse(data);
-    if (!validatedData.success) {
-        return { error: validatedData.error.message };
-    }
-
-    const response = await LocalApi.registerUser(validatedData.data);
-
+export const registerUser = createAction(registerUserSchema, async (parsedInput: z.infer<typeof registerUserSchema>): Promise<ApiResponse<AuthResponse>> => {
+    const response = await LocalApi.registerUser(parsedInput);
     if (response.error) {
-        return { error: response.error };
+        return createErrorResponse("400", "auth.registrationFailed", {
+            details: response.error
+        });
     }
 
     if (!response.data) {
-        return { error: "No data received from server" };
+        return createErrorResponse("400", "auth.noDataReceived", {
+            details: "No data received from server"
+        });
     }
 
-    //Set httponly cookie
+    // Set httpOnly cookie
     const cookieStore = await cookies();
     cookieStore.set("token", response.data.token, {
         httpOnly: true,
@@ -60,5 +69,6 @@ export async function registerUser(data: z.infer<typeof registerUserSchema>) {
         secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-    return { success: true };
-}
+
+    return createSuccessResponse(response.data, "auth.registrationSuccess");
+});

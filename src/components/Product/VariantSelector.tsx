@@ -182,7 +182,9 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                     </div>
 
                     <div className="flex items-center space-x-2">
-                        <Badge keyValue="Status" label={variantData.inStock ? 'In Stock' : 'Out of Stock'} color={variantData.inStock ? 'green' : 'red'} />
+                        <Badge color={variantData.inStock ? 'green' : 'red'}>
+                            {variantData.inStock ? 'In Stock' : 'Out of Stock'}
+                        </Badge>
                     </div>
                 </div>
             )}
@@ -210,7 +212,9 @@ export function VariantSelector({ product, onVariantChange }: VariantSelectorPro
                     <h4 className="text-sm font-medium text-blue-900 mb-2">Selected Options:</h4>
                     <div className="flex flex-wrap gap-2">
                         {Object.entries(selectedCombination).map(([key, label]) => (
-                            <Badge key={key} label={label} color="blue" keyValue={key} />
+                            <Badge key={key} color="blue">
+                                {key}: {label}
+                            </Badge>
                         ))}
                     </div>
                 </div>

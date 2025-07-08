@@ -5,6 +5,7 @@ import { NavBar } from "../components/NavBar";
 import { ConfigProvider } from "../components/ConfigProvider";
 import { LocalApi } from "../lib/api/LocalApi";
 import { LanguageProvider } from "../lib/i18n/LanguageProvider";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased overflow-x-hidden`}>
+        <Toaster />
         <LanguageProvider>
           <ConfigProvider>
             <NavBar />

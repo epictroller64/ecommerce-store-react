@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { LanguageContextType } from '../interface/Language';
+import { LanguageContextType, Translation } from '../interface/Language';
 import { translations } from './translations';
 import { supportedLanguages, defaultLanguage, fallbackLanguage, getLanguageByCode, isRTL } from './languages';
 
@@ -25,38 +25,24 @@ export function LanguageProvider({ children, initialLanguage }: LanguageProvider
     });
 
     // Func which returns the translation
-    const t = useCallback((key: string, params?: Record<string, string | number>): string => {
+    const t = useCallback((key: string): string => {
         const keys = key.split('.');
-        let translation: unknown = translations[currentLanguage] || translations[fallbackLanguage];
+
+        let translation: Translation | string = translations[currentLanguage] || translations[fallbackLanguage];
 
         for (const k of keys) {
-            if (translation && typeof translation === 'object' && translation !== null && k in translation) {
-                translation = (translation as Record<string, unknown>)[k];
-            } else {
-                // default language
-                translation = translations[fallbackLanguage];
-                for (const fallbackKey of keys) {
-                    if (translation && typeof translation === 'object' && translation !== null && fallbackKey in translation) {
-                        translation = (translation as Record<string, unknown>)[fallbackKey];
-                    } else {
-                        return key;
-                    }
+            try {
+                if (typeof translation === 'string') {
+                    break
                 }
-                break;
+                translation = translation[k]
+            } catch {
+                return key
             }
         }
 
-        if (typeof translation !== 'string') {
-            return key;
-        }
-
-        if (params) {
-            return translation.replace(/\{(\w+)\}/g, (match, param) => {
-                return params[param]?.toString() || match;
-            });
-        }
-
-        return translation;
+        console.log(`returning translation with key: ${key}, translation: ${translation}, language: ${currentLanguage}`);
+        return typeof translation === 'string' ? translation : key
     }, [currentLanguage]);
 
     const setLanguage = useCallback((languageCode: string) => {

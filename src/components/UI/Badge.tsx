@@ -1,12 +1,11 @@
 type BadgeProps = {
-    keyValue: string;
-    label: string;
+    children: React.ReactNode;
     color: "blue" | "green" | "red" | "yellow" | "purple" | "orange" | "pink" | "gray" | "black" | "white";
 }
 
-export default function Badge({ keyValue, label, color }: BadgeProps) {
+export default function Badge({ children, color }: BadgeProps) {
     return <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${matchBadgeColor(color)}`}>
-        {keyValue}: {label}
+        {children}
     </span>
 }
 

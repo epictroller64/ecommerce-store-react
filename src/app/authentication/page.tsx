@@ -9,6 +9,7 @@ import { loginUser, registerUser } from "../../lib/actions/authActions";
 import { useTranslations } from "../../lib/hooks/useTranslations";
 import { ComponentStyles } from "../../lib/styles/componentStyles";
 import { useRouter } from "next/navigation";
+import { handleWithToast } from "../../components/Utils";
 
 export default function AuthenticationPage() {
     const [isLoginTab, setIsLoginTab] = useState(true);
@@ -24,22 +25,22 @@ export default function AuthenticationPage() {
                         {isLoginTab ? t("loginSubtitle") : t("registerSubtitle")}
                     </p>
                 </div>
+
                 <div className={ComponentStyles.auth.tabs.container}>
                     <button
-                        className={`${ComponentStyles.auth.tabs.tab} ${isLoginTab ? ComponentStyles.auth.tabs.tabActive : ComponentStyles.auth.tabs.tabInactive
-                            }`}
                         onClick={() => setIsLoginTab(true)}
+                        className={`${ComponentStyles.auth.tabs.tab} ${isLoginTab ? ComponentStyles.auth.tabs.tabActive : ComponentStyles.auth.tabs.tabInactive}`}
                     >
                         {t("login")}
                     </button>
                     <button
-                        className={`${ComponentStyles.auth.tabs.tab} ${!isLoginTab ? ComponentStyles.auth.tabs.tabActive : ComponentStyles.auth.tabs.tabInactive
-                            }`}
                         onClick={() => setIsLoginTab(false)}
+                        className={`${ComponentStyles.auth.tabs.tab} ${!isLoginTab ? ComponentStyles.auth.tabs.tabActive : ComponentStyles.auth.tabs.tabInactive}`}
                     >
                         {t("register")}
                     </button>
                 </div>
+
                 {isLoginTab ? <LoginForm /> : <RegisterForm />}
             </div>
         </div>
@@ -50,7 +51,6 @@ const RegisterForm = () => {
     const { t } = useTranslations();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
     const form = useForm<z.infer<typeof registerUserSchema>>({
         resolver: zodResolver(registerUserSchema),
@@ -58,33 +58,23 @@ const RegisterForm = () => {
 
     async function onSubmit(data: z.infer<typeof registerUserSchema>) {
         setIsLoading(true);
-        setMessage(null);
 
-        try {
-            const response = await registerUser(data);
-            if (response.error) {
-                const errorMessage = typeof response.error === 'string' ? response.error : response.error.message;
-                setMessage({ type: 'error', text: errorMessage });
-            } else {
-                setMessage({ type: 'success', text: t("registrationSuccess") });
-                router.push("/");
-            }
-        } catch {
-            setMessage({ type: 'error', text: t("registrationError") });
-        } finally {
-            setIsLoading(false);
+        const response = await handleWithToast(
+            registerUser(data),
+            t,
+            'auth.registrationSuccess',
+            'auth.registrationFailed'
+        );
+
+        if (response.success) {
+            router.push("/");
         }
+
+        setIsLoading(false);
     }
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className={ComponentStyles.auth.form.container}>
-            {message && (
-                <div className={`${ComponentStyles.alert.base} ${message.type === 'success' ? ComponentStyles.alert.success : ComponentStyles.alert.error
-                    }`}>
-                    {message.text}
-                </div>
-            )}
-
             <div className={ComponentStyles.auth.form.group}>
                 <label htmlFor="name" className={ComponentStyles.auth.form.label}>
                     {t("name")}
@@ -174,7 +164,6 @@ const LoginForm = () => {
     const { t } = useTranslations();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
     const form = useForm<z.infer<typeof loginUserSchema>>({
         resolver: zodResolver(loginUserSchema),
@@ -182,34 +171,23 @@ const LoginForm = () => {
 
     async function onSubmit(data: z.infer<typeof loginUserSchema>) {
         setIsLoading(true);
-        setMessage(null);
 
-        try {
-            const response = await loginUser(data);
-            if (response.error) {
-                const errorMessage = typeof response.error === 'string' ? response.error : response.error.message;
-                setMessage({ type: 'error', text: errorMessage });
-            } else {
-                setMessage({ type: 'success', text: t("loginSuccess") });
-                router.push("/");
-            }
-        } catch {
-            // Generic error message
-            setMessage({ type: 'error', text: t("loginError") });
-        } finally {
-            setIsLoading(false);
+        const response = await handleWithToast(
+            loginUser(data),
+            t,
+            'auth.loginSuccess',
+            'auth.loginFailed'
+        );
+
+        if (response.success) {
+            router.push("/");
         }
+
+        setIsLoading(false);
     }
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className={ComponentStyles.auth.form.container}>
-            {message && (
-                <div className={`${ComponentStyles.alert.base} ${message.type === 'success' ? ComponentStyles.alert.success : ComponentStyles.alert.error
-                    }`}>
-                    {message.text}
-                </div>
-            )}
-
             <div className={ComponentStyles.auth.form.group}>
                 <label htmlFor="loginEmail" className={ComponentStyles.auth.form.label}>
                     {t("email")}

@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage, useSupportedLanguages } from '../lib/i18n/LanguageProvider';
 
@@ -30,6 +29,7 @@ export function LanguageSwitcher({ className = '', variant = 'dropdown' }: Langu
 
     const handleLanguageChange = (languageCode: string) => {
         setLanguage(languageCode);
+        console.log(languageCode);
         setIsOpen(false);
     };
 

@@ -6,7 +6,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useCartStore } from "../lib/stores/cartStore";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import Button from "./UI/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ComponentStyles } from "../lib/styles/componentStyles";
 
@@ -16,6 +16,9 @@ export function NavBar() {
     const { getCartCount } = useCartStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    useEffect(() => {
+        console.log(`t changed: `)
+    }, [t]);
     if (loading) {
         return (
             <nav className={ComponentStyles.navbar.container}>

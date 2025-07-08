@@ -76,7 +76,7 @@ export const ComponentStyles = {
     },
 
     navbar: {
-        container: "bg-white shadow-sm border-b sticky top-0 z-50",
+        container: "bg-white shadow-sm sticky top-0 z-50",
         content: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
         header: "flex justify-between items-center min-h-16 py-2",
         logo: "text-lg sm:text-xl font-bold text-gray-900 truncate",
@@ -172,6 +172,182 @@ export const ComponentStyles = {
         social: {
             container: "mt-6",
             button: "w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        }
+    },
+
+    checkout: {
+        container: "max-w-4xl mx-auto space-y-8",
+        section: {
+            container: "bg-slate-50 rounded-lg p-6",
+            title: "text-xl font-semibold mb-4",
+            content: "space-y-3"
+        },
+        orderSummary: {
+            item: "flex justify-between items-center py-2 border-b border-gray-100",
+            itemContent: "flex-1",
+            itemName: "font-medium",
+            itemDetails: "text-sm text-gray-600",
+            itemPrice: "font-semibold",
+            total: "text-lg font-bold"
+        },
+        paymentMethod: {
+            container: "flex items-center p-4 bg-white border-transparent border rounded-lg cursor-pointer hover:border-blue-500 transition-colors",
+            radio: "mr-3",
+            content: "flex items-center flex-1",
+            icon: "text-2xl mr-3",
+            details: "flex-1",
+            name: "font-medium",
+            description: "text-sm text-gray-600",
+            fee: "text-sm text-gray-500"
+        },
+        deliveryMethod: {
+            container: "flex items-center p-4 border border-transparent bg-white rounded-lg cursor-pointer hover:border-blue-500 transition-colors",
+            radio: "mr-3",
+            content: "flex items-center flex-1",
+            icon: "text-2xl mr-3",
+            details: "flex-1",
+            header: "flex justify-between items-start",
+            name: "font-medium",
+            description: "text-sm text-gray-600",
+            estimatedDays: "text-sm text-gray-500",
+            price: "font-semibold"
+        },
+        submitButton: {
+            container: "flex justify-end",
+            button: "px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        }
+    },
+
+    orderPage: {
+        container: "max-w-4xl mx-auto px-4 py-8",
+        header: {
+            container: "mb-8",
+            title: "text-3xl font-bold text-gray-900 mb-2",
+            subtitle: "text-gray-600"
+        },
+        orderInfo: {
+            container: "bg-slate-50 rounded-lg p-6 mb-6",
+            header: "flex justify-between items-start mb-6",
+            orderId: "text-sm text-gray-600",
+            orderIdValue: "font-mono text-sm font-medium",
+            date: "text-sm text-gray-500",
+            status: "flex items-center gap-2"
+        },
+        orderItems: {
+            container: "bg-slate-50 rounded-lg p-6 mb-6",
+            title: "text-xl font-semibold mb-4",
+            item: "flex justify-between items-start py-4 border-b border-gray-100 last:border-b-0",
+            itemContent: "flex-1",
+            itemName: "font-medium text-gray-900",
+            itemVariant: "text-sm text-gray-600 mt-1",
+            itemQuantity: "text-sm text-gray-500 mt-1",
+            itemPrice: "font-semibold text-gray-900"
+        },
+        orderSummary: {
+            container: "bg-slate-50 rounded-lg p-6",
+            title: "text-xl font-semibold mb-4",
+            row: "flex justify-between items-center py-2",
+            label: "text-gray-600",
+            value: "font-semibold",
+            total: "text-lg font-bold text-gray-900 border-t border-gray-200 pt-2"
+        },
+        actions: {
+            container: "flex gap-4 mt-6",
+            button: "flex-1"
+        }
+    },
+
+    profile: {
+        container: "max-w-4xl mx-auto px-4 py-8 gap-2 flex flex-col",
+        header: {
+            container: "",
+            title: "text-3xl font-bold text-gray-900 mb-2",
+            subtitle: "text-gray-600"
+        },
+        userInfo: {
+            container: "bg-slate-50 rounded-lg p-6 mb-6",
+            header: "flex items-center justify-between mb-4",
+            title: "text-xl font-semibold",
+            avatar: "w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold",
+            userDetails: "flex-1 ml-4",
+            userName: "text-lg font-semibold text-gray-900",
+            userEmail: "text-gray-600",
+            userRole: "text-sm text-gray-500 mt-1"
+        },
+        stats: {
+            container: "grid grid-cols-1 md:grid-cols-3 gap-4",
+            card: "bg-slate-50 rounded-lg p-6 text-center",
+            number: "text-2xl font-bold text-gray-900",
+            label: "text-sm text-gray-600 mt-1"
+        },
+        sections: {
+            container: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+            section: "bg-slate-50 rounded-lg p-6",
+            title: "text-lg font-semibold mb-4",
+            content: "space-y-3"
+        },
+        quickActions: {
+            container: "bg-slate-50 rounded-lg p-6",
+            title: "text-lg font-semibold mb-4",
+            grid: "grid grid-cols-1 sm:grid-cols-2 gap-4",
+            action: "flex items-center p-4 bg-white rounded-lg border border-transparent hover:border-blue-500 transition-all cursor-pointer",
+            icon: "w-8 h-8 text-blue-600 mr-3",
+            content: "flex-1",
+            description: "text-sm text-gray-600"
+        }
+    },
+
+    settings: {
+        container: "max-w-4xl mx-auto px-4 py-8 gap-2 flex flex-col",
+        header: {
+            container: "",
+            title: "text-3xl font-bold text-gray-900 mb-2",
+            subtitle: "text-gray-600"
+        },
+        section: {
+            container: "bg-slate-50 rounded-lg p-6",
+            title: "text-xl font-semibold mb-4",
+            content: "space-y-4"
+        },
+        form: {
+            group: "space-y-2",
+            label: "block text-sm font-medium text-gray-700",
+            input: "w-full px-3 py-2 border border-transparent bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+            textarea: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical",
+            error: "text-red-500 text-sm mt-1",
+            success: "text-green-500 text-sm mt-1"
+        },
+        button: {
+            container: "flex justify-end gap-4",
+            primary: "px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex flex-row items-center gap-2",
+            secondary: "px-6 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-colors flex flex-row items-center gap-2"
+        }
+    },
+
+    wishlist: {
+        container: "max-w-4xl mx-auto px-4 py-8 gap-2 flex flex-col",
+        header: {
+            container: "",
+            title: "text-3xl font-bold text-gray-900 mb-2",
+            subtitle: "text-gray-600"
+        },
+        empty: {
+            container: "text-center py-12",
+            icon: "w-16 h-16 text-gray-300 mx-auto mb-4",
+            title: "text-xl text-gray-600 mb-4",
+            description: "text-gray-500 mb-6",
+            button: "inline-flex items-center gap-2"
+        },
+        grid: {
+            container: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+            item: "bg-slate-50 rounded-lg overflow-hidden"
+        },
+        item: {
+            image: "w-full h-48 object-cover",
+            content: "p-4",
+            title: "text-lg font-semibold mb-2 line-clamp-2",
+            price: "text-xl font-bold text-blue-600 mb-3",
+            actions: "flex gap-2"
         }
     }
 }; 

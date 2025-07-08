@@ -1,8 +1,12 @@
-import { ApiResponse, createSuccessResponse, SiteInfoResponse, ProductsResponse, AuthResponse, createErrorResponse } from "../interface/ApiResponse";
+import { ApiResponse, createSuccessResponse, SiteInfoResponse, ProductsResponse, AuthResponse, createErrorResponse, CompleteCheckoutResponse } from "../interface/ApiResponse";
 import { Category } from "../interface/Category";
+import { Order } from "../interface/Order";
 import { ProductWithVariants } from "../interface/Products";
 import { SiteConfig } from "../interface/SiteConfig";
+import { PaymentMethodResponse } from "../interface/PaymentMethod";
+import { DeliveryMethodResponse } from "../interface/DeliveryMethod";
 import { exampleConfig } from "./config";
+import { User } from "../interface/User";
 
 // Helper function to ensure all variants have required properties
 const createVariant = (id: string, productId: string, name: string, price: number, currency: string, key: string, label: string, translationKey: string) => ({
@@ -29,9 +33,189 @@ type ApiMethods = {
     "get-config": () => Promise<ApiResponse<SiteConfig>>;
     "get-best-selling-products": () => Promise<ApiResponse<ProductsResponse>>;
     "get-product": () => Promise<ApiResponse<ProductWithVariants>>;
+    "get-orders": () => Promise<ApiResponse<Order[]>>;
+    "get-order": () => Promise<ApiResponse<Order>>;
+    "create-order": () => Promise<ApiResponse<Order>>;
+    "cancel-order": () => Promise<ApiResponse<Order>>;
+    "get-payment-methods": () => Promise<ApiResponse<PaymentMethodResponse>>;
+    "get-delivery-methods": () => Promise<ApiResponse<DeliveryMethodResponse>>;
+    "get-user": () => Promise<ApiResponse<User>>;
+    "complete-checkout": () => Promise<ApiResponse<CompleteCheckoutResponse>>;
 };
 
 export const TestApi: ApiMethods = {
+    "get-user": async () => {
+        return Promise.resolve(createSuccessResponse({
+            id: "user-123",
+            name: "Test User",
+            email: "user@example.com",
+            role: "user",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        }, "User retrieved successfully"));
+    },
+    "complete-checkout": async () => {
+        return Promise.resolve(createSuccessResponse({
+            orderId: "order-1",
+            totalPrice: 100,
+            deliveryMethodId: "dm-1",
+            paymentMethodId: "pm-1",
+        }, "Order completed successfully"));
+    },
+    "get-orders": async () => {
+        return Promise.resolve(createSuccessResponse([
+            {
+                id: "order-1",
+                userId: "user-123",
+                totalPrice: 100,
+                status: "pending" as const,
+                items: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deliveryMethodId: "dm-1",
+                paymentMethodId: "pm-1",
+            }
+        ], "Orders retrieved successfully"));
+    },
+    "create-order": async () => {
+        return Promise.resolve(createSuccessResponse({
+            id: "order-1",
+            userId: "user-123",
+            totalPrice: 100,
+            status: "pending" as const,
+            items: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deliveryMethodId: "dm-1",
+            paymentMethodId: "pm-1",
+        }, "Order created successfully"));
+    },
+    "cancel-order": async () => {
+        return Promise.resolve(createSuccessResponse({
+            id: "order-1",
+            userId: "user-123",
+            totalPrice: 100,
+            status: "cancelled" as const,
+            items: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deliveryMethodId: "dm-1",
+            paymentMethodId: "pm-1",
+        }, "Order cancelled successfully"));
+    },
+    "get-payment-methods": async () => {
+        return Promise.resolve(createSuccessResponse({
+            paymentMethods: [
+                {
+                    id: "pm-1",
+                    name: "Credit Card",
+                    description: "Pay with Visa, Mastercard, or American Express",
+                    icon: "💳",
+                    type: "card" as const,
+                    isAvailable: true,
+                    processingFee: 0,
+                    processingTime: "Instant"
+                },
+                {
+                    id: "pm-2",
+                    name: "PayPal",
+                    description: "Pay with your PayPal account",
+                    icon: "🔵",
+                    type: "digital_wallet" as const,
+                    isAvailable: true,
+                    processingFee: 0,
+                    processingTime: "Instant"
+                },
+                {
+                    id: "pm-3",
+                    name: "Apple Pay",
+                    description: "Pay with Apple Pay",
+                    icon: "🍎",
+                    type: "digital_wallet" as const,
+                    isAvailable: true,
+                    processingFee: 0,
+                    processingTime: "Instant"
+                },
+                {
+                    id: "pm-4",
+                    name: "Bank Transfer",
+                    description: "Pay via bank transfer (3-5 business days)",
+                    icon: "🏦",
+                    type: "bank_transfer" as const,
+                    isAvailable: true,
+                    processingFee: 0,
+                    processingTime: "3-5 business days"
+                }
+            ]
+        }, "Payment methods retrieved successfully"));
+    },
+    "get-delivery-methods": async () => {
+        return Promise.resolve(createSuccessResponse({
+            deliveryMethods: [
+                {
+                    id: "dm-1",
+                    name: "Standard Shipping",
+                    description: "Free shipping on orders over $50",
+                    icon: "📦",
+                    type: "standard" as const,
+                    price: 5.99,
+                    currency: "USD",
+                    estimatedDays: "5-7 business days",
+                    isAvailable: true,
+                    trackingAvailable: true
+                },
+                {
+                    id: "dm-2",
+                    name: "Express Shipping",
+                    description: "Fast delivery with tracking",
+                    icon: "🚀",
+                    type: "express" as const,
+                    price: 12.99,
+                    currency: "USD",
+                    estimatedDays: "2-3 business days",
+                    isAvailable: true,
+                    trackingAvailable: true
+                },
+                {
+                    id: "dm-3",
+                    name: "Same Day Delivery",
+                    description: "Get your order today (available in select areas)",
+                    icon: "⚡",
+                    type: "same_day" as const,
+                    price: 24.99,
+                    currency: "USD",
+                    estimatedDays: "Same day",
+                    isAvailable: true,
+                    trackingAvailable: true
+                },
+                {
+                    id: "dm-4",
+                    name: "Store Pickup",
+                    description: "Pick up your order from our store",
+                    icon: "🏪",
+                    type: "pickup" as const,
+                    price: 0,
+                    currency: "USD",
+                    estimatedDays: "Ready in 1 hour",
+                    isAvailable: true,
+                    trackingAvailable: false
+                }
+            ]
+        }, "Delivery methods retrieved successfully"));
+    },
+    "get-order": async () => {
+        return Promise.resolve(createSuccessResponse({
+            id: "order-1",
+            userId: "user-123",
+            totalPrice: 100,
+            status: "pending" as const,
+            items: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deliveryMethodId: "dm-1",
+            paymentMethodId: "pm-1",
+        }, "Order retrieved successfully"));
+    },
     "get-product": async () => {
         const availableProducts = [
             {
