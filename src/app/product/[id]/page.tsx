@@ -5,6 +5,7 @@ import { ComponentStyles } from "../../../lib/styles/componentStyles";
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const product = await LocalApi.getProduct(id);
+    console.log(`product:`, product, id)
     if (product.success && product.data) {
         const productData = product.data;
 

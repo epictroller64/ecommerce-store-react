@@ -1,13 +1,23 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductWithVariants, Variant } from "../../lib/interface/Products";
 import { Gallery } from "./ProductGallery";
 import { ProductStars, ReviewCount } from "./ProductStars";
 import { VariantSelector } from "./VariantSelector";
+import ErrorDisplay from "../Error/Error";
+import { useTranslations } from "../../lib/hooks/useTranslations";
 
 export default function ProductPageClient({ productData }: { productData: ProductWithVariants }) {
     const [selectedVariant, setSelectedVariant] = useState<Variant>(productData.variants[0]);
-
+    const { t } = useTranslations();
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
+    if (!loaded) {
+        // avoid hydration error
+        return <ErrorDisplay message={t('loading')} />
+    }
     return <>
         <Gallery variant={selectedVariant} />
         <div className="space-y-6">
@@ -19,7 +29,7 @@ export default function ProductPageClient({ productData }: { productData: Produc
 
             {productData.rating && productData.reviewCount && (
                 <div className="flex items-center space-x-2">
-                    <ProductStars rating={productData.rating} />
+                    <ProductStars rating={parseFloat(productData.rating)} />
                     <ReviewCount reviewCount={productData.reviewCount} />
                 </div>
             )}
