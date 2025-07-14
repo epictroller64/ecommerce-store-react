@@ -4,7 +4,7 @@ import ProductCollection from "./ProductCollection";
 
 export default async function ProductSection() {
     const products = await LocalApi.getProducts();
-    if (products.success && products.data) {
+    if (products.success && products.data?.products) {
         return (
             <ProductCollection products={products.data.products} title={"products.featured"} />
         );

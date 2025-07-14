@@ -14,27 +14,27 @@ import { getAuthToken } from "./utils"
 // All endpoints will be proxied by Next API as I dont want to expose the backend to the client
 
 const API_PATH = "http://localhost:8080"
-const TEST = true
+const TEST = false // whether to use local mock data instead of backend
 
 export const LocalApi = {
-    registerUser: (request: RegisterRequest) => post<AuthResponse>("register-user", request),
-    loginUser: (request: LoginRequest) => post<AuthResponse>("login-user", request),
-    getProducts: () => get<ProductsResponse>("get-products"),
-    getSiteInfo: () => get<SiteInfo>("get-site-info"),
+    registerUser: (request: RegisterRequest) => post<AuthResponse>("auth/register-user", request),
+    loginUser: (request: LoginRequest) => post<AuthResponse>("auth/login-user", request),
+    getProducts: () => get<ProductsResponse>("products/get-products"),
+    getSiteInfo: () => get<SiteInfo>("site/get-site-info"),
     getCategories: () => get<Category[]>("get-categories"),
-    getHeroImages: () => get<string[]>("get-hero-images"),
-    getConfig: () => get<SiteConfig>("get-config"),
-    getBestSellingProducts: () => get<ProductsResponse>("get-best-selling-products"),
-    getProduct: (id: string) => get<ProductWithVariants>("get-product", { id }),
-    getUser: (token: string) => get<User>("get-user", { token }),
-    createOrder: (request: CreateOrderRequest) => post<Order>("create-order", request),
-    cancelOrder: (orderId: string) => post<Order>("cancel-order", { orderId }),
-    getOrders: () => get<Order[]>("get-orders"), //Get orders for the authed user
-    getOrder: (orderId: string) => get<Order>("get-order", { orderId }),
-    getPaymentMethods: () => get<PaymentMethodResponse>("get-payment-methods"),
-    getDeliveryMethods: () => get<DeliveryMethodResponse>("get-delivery-methods"),
-    completeCheckout: (request: CompleteCheckoutRequest) => post<CompleteCheckoutResponse>("complete-checkout", request),
-    updateUserSettings: (request: UpdateUserSettingsRequest) => post<User>("update-user-settings", request),
+    getHeroImages: () => get<string[]>("site/get-hero-images"),
+    getConfig: () => get<SiteConfig>("site/get-config"),
+    getBestSellingProducts: () => get<ProductsResponse>("products/get-best-selling-products"),
+    getProduct: (id: string) => get<ProductWithVariants>("products/get-product", { id }),
+    getUser: (token: string) => get<User>("users/get-user", { token }),
+    createOrder: (request: CreateOrderRequest) => post<Order>("orders/create-order", request),
+    cancelOrder: (orderId: string) => post<Order>("orders/cancel-order", { orderId }),
+    getOrders: () => get<Order[]>("orders/get-orders"), //Get orders for the authed user
+    getOrder: (orderId: string) => get<Order>("orders/get-order", { orderId }),
+    getPaymentMethods: () => get<PaymentMethodResponse>("payment-methods/get-payment-methods"),
+    getDeliveryMethods: () => get<DeliveryMethodResponse>("delivery-methods/get-delivery-methods"),
+    completeCheckout: (request: CompleteCheckoutRequest) => post<CompleteCheckoutResponse>("checkout/complete-checkout", request),
+    updateUserSettings: (request: UpdateUserSettingsRequest) => post<User>("users/update-user-settings", request),
 }
 
 async function post<T, Req = unknown>(path: string, body: Req | FormData) {

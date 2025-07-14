@@ -2,8 +2,6 @@ import CategoryCollection from "../components/Product/CategoryCollection";
 import Hero from "../components/Home/Hero";
 import ProductSection from "../components/Product/ProductSection";
 import BestSellingSection from "../components/Product/BestSellingSection";
-import FeaturedCard from "../components/Home/FeaturedCard";
-import { LocalApi } from "../lib/api/LocalApi";
 import ShopFeatures, { ShopFeature } from "../components/Home/ShopFeatures";
 import { ComponentStyles } from "../lib/styles/componentStyles";
 
@@ -33,23 +31,13 @@ const features: ShopFeature[] = [
 ]
 
 export default async function Home() {
-  const product = await LocalApi.getProduct("prod-1");
-  if (!product.data) {
-    return <div>Product not found</div>
-  }
+  // Fetch featured product
   return (
     <main className={ComponentStyles.layout.main}>
       <Hero />
       <ShopFeatures features={features} />
       <div className={`flex flex-col gap-4 px-4 sm:px-6 lg:px-8 mt-4 ${ComponentStyles.layout.container}`}>
         <div className="w-full max-w-4xl mx-auto">
-          <FeaturedCard
-            product={product.data}
-            originalPrice={100}
-            salePrice={80}
-            ctaText="Add to Cart"
-            tailwindWidth="w-full"
-          />
         </div>
         <CategoryCollection />
         <ProductSection />
