@@ -8,6 +8,7 @@ import { LocalApi } from "../lib/api/LocalApi";
 import { LanguageProvider } from "../lib/i18n/LanguageProvider";
 import { Toaster } from "react-hot-toast";
 import TanstackQueryProvider from "../components/TanstackQueryProvider";
+import { getUser } from "../lib/actions/userActions";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,13 +47,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authentication = await getUser()
+  console.log(`authentication:`, authentication)
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased overflow-x-hidden`}>
         <Toaster />
         <LanguageProvider>
           <ConfigProvider>
-            <NavBar />
+            <NavBar user={authentication.data} />
             <div className="min-h-screen">
               <NuqsAdapter>
                 <TanstackQueryProvider>

@@ -15,6 +15,14 @@ export async function logoutUser() {
     redirect("/");
 }
 
+export async function getCookieAuthentication() {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token");
+    const refreshToken = cookieStore.get("refreshToken");
+    return { token, refreshToken };
+}
+
+
 export const loginUser = createAction(loginUserSchema, async (parsedInput: z.infer<typeof loginUserSchema>): Promise<ApiResponse<AuthResponse>> => {
     const response = await LocalApi.loginUser(parsedInput);
     if (response.error) {

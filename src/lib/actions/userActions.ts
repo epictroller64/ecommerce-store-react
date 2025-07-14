@@ -1,10 +1,11 @@
 'use server'
 import { LocalApi } from "../api/LocalApi";
-import { ApiResponse } from "../interface/ApiResponse";
+import { ApiResponse, createErrorResponse, createSuccessResponse } from "../interface/ApiResponse";
 import { UpdateUserSettingsRequest } from "../interface/Request";
 import { User } from "../interface/User";
 import { updateUserSettingsSchema } from "../schemas/zodSchemas";
 import { createAction } from "./action";
+import { getCookieAuthentication } from "./authActions";
 
 
 export const updateUserSettings = createAction(updateUserSettingsSchema, async (parsedInput: UpdateUserSettingsRequest) => {
@@ -26,4 +27,24 @@ export async function updateUserSettings_(data: UpdateUserSettingsRequest): Prom
         }
     }
     return await LocalApi.updateUserSettings(data);
-}   
+}
+export async function getUser(): Promise<ApiResponse<User>> {
+    const { token } = await getCookieAuthentication();
+    if (!token) {
+        return createErrorResponse("400", "user.noToken", {
+            details: "No token found"
+        });
+    }
+    const response = await LocalApi.getUser(token.value);
+    if (response.error) {
+        return createErrorResponse("400", "user.failedToGet", {
+            details: response.error
+        });
+    }
+    if (!response.data) {
+        return createErrorResponse("400", "user.noDataReceived", {
+            details: "No data received from server"
+        });
+    }
+    return createSuccessResponse(response.data, "user.getSuccess");
+}

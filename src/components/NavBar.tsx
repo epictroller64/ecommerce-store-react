@@ -4,21 +4,19 @@ import { useConfigContext } from "./ConfigProvider";
 import { useLanguage } from "../lib/i18n/LanguageProvider";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useCartStore } from "../lib/stores/cartStore";
-import { HiOutlineShoppingCart } from "react-icons/hi";
+import { HiOutlineShoppingCart, HiOutlineUser } from "react-icons/hi";
 import Button from "./UI/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ComponentStyles } from "../lib/styles/componentStyles";
+import { User } from "../lib/interface/User";
 
-export function NavBar() {
+export function NavBar({ user }: { user: User | undefined }) {
     const { config, loading } = useConfigContext();
     const { t } = useLanguage();
     const { getCartCount } = useCartStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    useEffect(() => {
-        console.log(`t changed: `)
-    }, [t]);
     if (loading) {
         return (
             <nav className={ComponentStyles.navbar.container}>
@@ -83,6 +81,10 @@ export function NavBar() {
                                     {getCartCount()}
                                 </span>
                             )}
+                        </Link>
+                        <Link href={`${user ? "/profile" : "/authentication"}`} className={ComponentStyles.navbar.cartButton}>
+                            <HiOutlineUser className={ComponentStyles.navbar.cartIcon} />
+                            <span className="hidden sm:inline">{t('navigation.profile')}</span>
                         </Link>
                     </div>
 
