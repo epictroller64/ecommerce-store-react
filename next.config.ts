@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: 'prd.place',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      }
     ]
   }
 };

@@ -1,12 +1,12 @@
 'use client'
 import React from 'react';
-import { ProductFilters, ProductWithPrice } from '../../lib/interface/Products';
+import { ProductFilters } from '../../lib/interface/Products';
 import { Category } from '../../lib/interface/Category';
 import { ProductItem } from '../../components/Product/ProductItem';
 import Button from '../../components/UI/Button';
 import Filter from '../../components/Products/Filter';
 import { useQueryState, parseAsArrayOf, parseAsInteger, parseAsString } from "nuqs";
-import { ApiResponse } from '../../lib/interface/ApiResponse';
+import { ApiResponse, ProductsResponse } from '../../lib/interface/ApiResponse';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from '../../lib/hooks/useTranslations';
 import ErrorDisplay from '../../components/Error/Error';
@@ -78,9 +78,9 @@ export default function ProductsPage() {
         }
 
         const response = await fetch(`/api/products/filtered?filters=${JSON.stringify(filtersToApply)}`);
-        const data = await response.json() as ApiResponse<ProductWithPrice[]>;
+        const data = await response.json() as ApiResponse<ProductsResponse>;
         if (data.success && data.data) {
-            let filteredProducts = data.data;
+            let filteredProducts = data.data.products;
             //apply the filters
             if (filters.searchQuery && filters.searchQuery.trim()) {
                 const query = filters.searchQuery.toLowerCase();
@@ -107,6 +107,7 @@ export default function ProductsPage() {
     if (!products || !categories) {
         return <ErrorDisplay message={t('noProductsOrCategoriesFound')} />
     }
+    console.log(`products:`, products)
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

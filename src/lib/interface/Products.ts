@@ -16,7 +16,7 @@ export interface Product {
     name: string;
     description: string;
     category: string;
-    rating?: number;
+    rating?: string;
     reviewCount?: number;
     createdAt: string;
     updatedAt: string;

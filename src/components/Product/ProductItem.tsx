@@ -49,10 +49,10 @@ function ProductItem({ product }: ProductItemProps) {
                 {product.rating && (
                     <div className="flex items-center gap-2">
                         <div className="flex">
-                            <ProductStars rating={product.rating} />
+                            <ProductStars rating={parseFloat(product.rating)} />
                         </div>
                         <span className="text-sm text-gray-600">
-                            {product.rating.toFixed(1)}
+                            {product.rating}
                         </span>
                         {product.reviewCount && (
                             <span className="text-sm text-gray-500">
