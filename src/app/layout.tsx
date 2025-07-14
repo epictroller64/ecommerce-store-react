@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "../components/NavBar";
@@ -6,6 +7,7 @@ import { ConfigProvider } from "../components/ConfigProvider";
 import { LocalApi } from "../lib/api/LocalApi";
 import { LanguageProvider } from "../lib/i18n/LanguageProvider";
 import { Toaster } from "react-hot-toast";
+import TanstackQueryProvider from "../components/TanstackQueryProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,7 +54,11 @@ export default async function RootLayout({
           <ConfigProvider>
             <NavBar />
             <div className="min-h-screen">
-              {children}
+              <NuqsAdapter>
+                <TanstackQueryProvider>
+                  {children}
+                </TanstackQueryProvider>
+              </NuqsAdapter>
             </div>
           </ConfigProvider>
         </LanguageProvider>

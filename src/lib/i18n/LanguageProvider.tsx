@@ -40,8 +40,6 @@ export function LanguageProvider({ children, initialLanguage }: LanguageProvider
                 return key
             }
         }
-
-        console.log(`returning translation with key: ${key}, translation: ${translation}, language: ${currentLanguage}`);
         return typeof translation === 'string' ? translation : key
     }, [currentLanguage]);
 

@@ -1,7 +1,7 @@
 import { ApiResponse, AuthResponse, CompleteCheckoutResponse, ProductsResponse } from "../interface/ApiResponse"
 import { Category } from "../interface/Category"
 import { Order } from "../interface/Order"
-import { ProductWithVariants } from "../interface/Products"
+import { ProductWithVariants, ProductFilters } from "../interface/Products"
 import { CompleteCheckoutRequest, CreateOrderRequest, LoginRequest, RegisterRequest, UpdateUserSettingsRequest } from "../interface/Request"
 import { SiteConfig } from "../interface/SiteConfig"
 import { SiteInfo } from "../interface/SiteInfo"
@@ -21,8 +21,9 @@ export const LocalApi = {
     loginUser: (request: LoginRequest) => post<AuthResponse>("auth/login-user", request),
     getProducts: () => get<ProductsResponse>("products/get-products"),
     getSiteInfo: () => get<SiteInfo>("site/get-site-info"),
-    getCategories: () => get<Category[]>("get-categories"),
+    getCategories: () => get<Category[]>("categories/get-categories"),
     getHeroImages: () => get<string[]>("site/get-hero-images"),
+    getFilteredProducts: (filters?: ProductFilters) => get<ProductsResponse>("products/get-filtered-products", filters ? { filters: JSON.stringify(filters) } : undefined),
     getConfig: () => get<SiteConfig>("site/get-config"),
     getBestSellingProducts: () => get<ProductsResponse>("products/get-best-selling-products"),
     getProduct: (id: string) => get<ProductWithVariants>("products/get-product", { id }),

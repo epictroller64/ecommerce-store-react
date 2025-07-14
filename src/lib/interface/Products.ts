@@ -42,6 +42,7 @@ export interface ProductFilters {
         max: number;
     };
     categories?: string[];
-    inStock?: boolean;
-    rating?: number;
+    inStock?: boolean | null;
+    rating?: number | null;
+    searchQuery?: string;
 }
