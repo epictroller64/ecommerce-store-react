@@ -1,21 +1,16 @@
-import { CheckoutError, CheckoutForm } from '../../../components/Checkout';
-import TranslatedText from '../../../components/Text';
-import { LocalApi } from '../../../lib/api/LocalApi';
-import { ComponentStyles } from '../../../lib/styles/componentStyles';
+import { CheckoutError, CheckoutForm } from '../../components/Checkout';
+import TranslatedText from '../../components/Text';
+import { LocalApi } from '../../lib/api/LocalApi';
+import { ComponentStyles } from '../../lib/styles/componentStyles';
 
-interface CheckoutPageProps {
-    params: Promise<{
-        orderId: string;
-    }>;
-}
-
-export default async function CheckoutPage({ params }: CheckoutPageProps) {
-    const { orderId } = await params;
+export default async function CheckoutPage() {
     const paymentMethods = await LocalApi.getPaymentMethods();
     const deliveryMethods = await LocalApi.getDeliveryMethods();
     if (paymentMethods.error || deliveryMethods.error || !paymentMethods.data || !deliveryMethods.data) {
         return <CheckoutError error={paymentMethods.error?.message || deliveryMethods.error?.message || 'Something went wrong'} />;
     }
+    console.log(paymentMethods.data);
+    console.log(deliveryMethods.data);
     return (
         <div className={`${ComponentStyles.layout.container} ${ComponentStyles.layout.section}`}>
             <div className="max-w-4xl mx-auto">
@@ -24,7 +19,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     <TranslatedText className="text-gray-600" textTag="p">completeOrder</TranslatedText>
                 </div>
 
-                <CheckoutForm orderId={orderId} paymentMethods={paymentMethods.data?.paymentMethods} deliveryMethods={deliveryMethods.data?.deliveryMethods} />
+                <CheckoutForm paymentMethods={paymentMethods.data} deliveryMethods={deliveryMethods.data} />
             </div>
         </div>
     );

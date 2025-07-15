@@ -10,14 +10,10 @@ import { createAction } from "./action";
 
 export const createOrder = createAction(createOrderSchema, async (parsedInput: z.infer<typeof createOrderSchema>): Promise<ApiResponse<Order>> => {
     const response = await LocalApi.createOrder(parsedInput);
-    if (response.error || !response.data) {
-        return createErrorResponse("400", "order.failedToCreate", {
-            details: response.error?.message || "Failed to create order"
-        });
-    }
-    return createSuccessResponse(response.data, "order.createdSuccessfully");
+    return response;
 });
 
+// When you click complete checkout button. Currently emulating successful payment in here
 export const completeCheckout = createAction(completeCheckoutSchema, async (parsedInput: z.infer<typeof completeCheckoutSchema>): Promise<ApiResponse<CompleteCheckoutResponse>> => {
     const response = await LocalApi.completeCheckout(parsedInput);
     if (response.error || !response.data) {

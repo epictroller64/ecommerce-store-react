@@ -18,10 +18,19 @@ export const loginUserSchema = z.object({
 
 
 export const createOrderSchema = z.object({
-    cart: z.array(z.object({
+    items: z.array(z.object({
         variantId: z.string(),
         quantity: z.number().min(1),
     })).min(1),
+    deliveryMethodId: z.string(),
+    paymentMethodId: z.string(),
+    shippingAddress: z.object({
+        street: z.string(),
+        city: z.string(),
+        state: z.string(),
+        zipCode: z.string(),
+        country: z.string(),
+    }),
 });
 
 export const completeCheckoutSchema = z.object({

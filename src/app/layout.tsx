@@ -48,7 +48,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const authentication = await getUser()
-  console.log(`authentication:`, authentication)
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased overflow-x-hidden`}>

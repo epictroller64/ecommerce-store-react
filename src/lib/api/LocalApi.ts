@@ -6,8 +6,8 @@ import { CompleteCheckoutRequest, CreateOrderRequest, LoginRequest, RegisterRequ
 import { SiteConfig } from "../interface/SiteConfig"
 import { SiteInfo } from "../interface/SiteInfo"
 import { User } from "../interface/User"
-import { PaymentMethodResponse } from "../interface/PaymentMethod"
-import { DeliveryMethodResponse } from "../interface/DeliveryMethod"
+import { PaymentMethod } from "../interface/PaymentMethod"
+import { DeliveryMethod } from "../interface/DeliveryMethod"
 import { Path, TestApi } from "./TestApi"
 import { getAuthToken } from "./utils"
 
@@ -32,8 +32,8 @@ export const LocalApi = {
     cancelOrder: (orderId: string) => post<Order>("orders/cancel-order", { orderId }),
     getOrders: () => get<Order[]>("orders/get-orders"), //Get orders for the authed user
     getOrder: (orderId: string) => get<Order>("orders/get-order", { orderId }),
-    getPaymentMethods: () => get<PaymentMethodResponse>("payment-methods/get-payment-methods"),
-    getDeliveryMethods: () => get<DeliveryMethodResponse>("delivery-methods/get-delivery-methods"),
+    getPaymentMethods: () => get<PaymentMethod[]>("payment-methods/get-payment-methods"),
+    getDeliveryMethods: () => get<DeliveryMethod[]>("delivery-methods/get-delivery-methods"),
     completeCheckout: (request: CompleteCheckoutRequest) => post<CompleteCheckoutResponse>("checkout/complete-checkout", request),
     updateUserSettings: (request: UpdateUserSettingsRequest) => post<User>("users/update-user-settings", request),
 }

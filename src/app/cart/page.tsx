@@ -7,11 +7,8 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import Button, { RoundedButton } from "../../components/UI/Button";
 import Minus from "../../components/SVG/Minus";
 import Plus from "../../components/SVG/Plus";
-import { createOrder } from "../../lib/actions/orderActions";
-import { useRouter } from "next/navigation";
 
 export default function CartPage() {
-    const router = useRouter();
     const { t } = useLanguage();
     const {
         cart,
@@ -39,12 +36,6 @@ export default function CartPage() {
         }).format(price);
     };
 
-    const handleCheckout = async () => {
-        const response = await createOrder({ cart: cart.map(c => ({ variantId: c.variant.id, quantity: c.quantity })) });
-        if (response.success) {
-            router.push(`/checkout/${response.orderId}`);
-        }
-    }
 
     if (cart.length === 0) {
         return (
@@ -178,8 +169,10 @@ export default function CartPage() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <Button variant="primary" size="lg" onClick={handleCheckout}>
-                                {t('cart.checkout') || 'Proceed to Checkout'}
+                            <Button variant="primary" size="lg">
+                                <Link href="/checkout">
+                                    {t('cart.checkout') || 'Proceed to Checkout'}
+                                </Link>
                             </Button>
                             <Button variant="secondary" size="lg">
                                 <Link

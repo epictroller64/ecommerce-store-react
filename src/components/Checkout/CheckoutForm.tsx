@@ -8,27 +8,34 @@ import { ComponentStyles } from '../../lib/styles/componentStyles';
 import CheckoutLoading from './CheckoutLoading';
 import CheckoutError from './CheckoutError';
 import { useForm } from 'react-hook-form';
-import { completeCheckoutSchema } from '../../lib/schemas/zodSchemas';
+import { createOrderSchema } from '../../lib/schemas/zodSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from '../../lib/hooks/useTranslations';
 import { handleWithToast } from '../Utils';
-import { completeCheckout } from '../../lib/actions/orderActions';
+import { createOrder } from '../../lib/actions/orderActions';
+import Button from '../UI/Button';
 
 interface CheckoutFormProps {
-    orderId: string;
     paymentMethods: PaymentMethod[];
     deliveryMethods: DeliveryMethod[];
 }
 
-export default function CheckoutForm({ orderId, paymentMethods, deliveryMethods }: CheckoutFormProps) {
-    const form = useForm<z.infer<typeof completeCheckoutSchema>>({
-        resolver: zodResolver(completeCheckoutSchema),
+export default function CheckoutForm({ paymentMethods, deliveryMethods }: CheckoutFormProps) {
+    const form = useForm<z.infer<typeof createOrderSchema>>({
+        resolver: zodResolver(createOrderSchema),
         defaultValues: {
-            orderId,
+            items: [],
             paymentMethodId: '',
             deliveryMethodId: '',
+            shippingAddress: {
+                street: '',
+                city: '',
+                state: '',
+                zipCode: '',
+                country: '',
+            },
         },
     });
     const { t } = useTranslations();
@@ -46,16 +53,29 @@ export default function CheckoutForm({ orderId, paymentMethods, deliveryMethods 
     const deliveryCost = selectedDelivery?.price || 0;
     const total = subtotal + deliveryCost;
 
-    const onSubmit = async (data: z.infer<typeof completeCheckoutSchema>) => {
+    // Update form values when selections change
+    useEffect(() => {
+        form.setValue('paymentMethodId', selectedPaymentMethod);
+        form.setValue('deliveryMethodId', selectedDeliveryMethod);
+
+        // Set cart items
+        const items = cartItems.map(item => ({
+            variantId: item.variant.id,
+            quantity: item.quantity,
+        }));
+        form.setValue('items', items);
+    }, [selectedPaymentMethod, selectedDeliveryMethod, cartItems, form]);
+
+    const onSubmit = async (data: z.infer<typeof createOrderSchema>) => {
         const response = await handleWithToast(
-            completeCheckout(data),
+            createOrder(data),
             t,
             'checkout.orderCompleted',
             'checkout.failedToComplete'
         );
 
         if (response.success && response.data) {
-            router.push(`/checkout/order-confirmed/${response.data.orderId}`);
+            router.push(`/checkout/order-confirmed/${response.data.id}`);
         } else {
             setError(response.error?.message || 'Something went wrong');
         }
@@ -114,6 +134,103 @@ export default function CheckoutForm({ orderId, paymentMethods, deliveryMethods 
                 </div>
 
                 <div className={ComponentStyles.checkout.section.container}>
+                    <h2 className={ComponentStyles.checkout.section.title}>{t('shippingAddress')}</h2>
+                    <div className={ComponentStyles.checkout.section.content}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className={ComponentStyles.form.group}>
+                                <label htmlFor="street" className={ComponentStyles.form.label}>
+                                    {t('street')} *
+                                </label>
+                                <input
+                                    id="street"
+                                    type="text"
+                                    {...form.register('shippingAddress.street')}
+                                    className={form.formState.errors.shippingAddress?.street ? ComponentStyles.auth.form.inputError : ComponentStyles.form.input}
+                                    placeholder={t('streetPlaceholder')}
+                                />
+                                {form.formState.errors.shippingAddress?.street && (
+                                    <p className={ComponentStyles.form.error}>
+                                        {form.formState.errors.shippingAddress.street.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className={ComponentStyles.form.group}>
+                                <label htmlFor="city" className={ComponentStyles.form.label}>
+                                    {t('city')} *
+                                </label>
+                                <input
+                                    id="city"
+                                    type="text"
+                                    {...form.register('shippingAddress.city')}
+                                    className={form.formState.errors.shippingAddress?.city ? ComponentStyles.auth.form.inputError : ComponentStyles.form.input}
+                                    placeholder={t('cityPlaceholder')}
+                                />
+                                {form.formState.errors.shippingAddress?.city && (
+                                    <p className={ComponentStyles.form.error}>
+                                        {form.formState.errors.shippingAddress.city.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className={ComponentStyles.form.group}>
+                                <label htmlFor="state" className={ComponentStyles.form.label}>
+                                    {t('state')} *
+                                </label>
+                                <input
+                                    id="state"
+                                    type="text"
+                                    {...form.register('shippingAddress.state')}
+                                    className={form.formState.errors.shippingAddress?.state ? ComponentStyles.auth.form.inputError : ComponentStyles.form.input}
+                                    placeholder={t('statePlaceholder')}
+                                />
+                                {form.formState.errors.shippingAddress?.state && (
+                                    <p className={ComponentStyles.form.error}>
+                                        {form.formState.errors.shippingAddress.state.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className={ComponentStyles.form.group}>
+                                <label htmlFor="zipCode" className={ComponentStyles.form.label}>
+                                    {t('zipCode')} *
+                                </label>
+                                <input
+                                    id="zipCode"
+                                    type="text"
+                                    {...form.register('shippingAddress.zipCode')}
+                                    className={form.formState.errors.shippingAddress?.zipCode ? ComponentStyles.auth.form.inputError : ComponentStyles.form.input}
+                                    placeholder={t('zipCodePlaceholder')}
+                                />
+                                {form.formState.errors.shippingAddress?.zipCode && (
+                                    <p className={ComponentStyles.form.error}>
+                                        {form.formState.errors.shippingAddress.zipCode.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className={ComponentStyles.form.group}>
+                                <label htmlFor="country" className={ComponentStyles.form.label}>
+                                    {t('country')} *
+                                </label>
+                                <input
+                                    id="country"
+                                    type="text"
+                                    {...form.register('shippingAddress.country')}
+                                    className={form.formState.errors.shippingAddress?.country ? ComponentStyles.auth.form.inputError : ComponentStyles.form.input}
+                                    placeholder={t('countryPlaceholder')}
+                                />
+                                {form.formState.errors.shippingAddress?.country && (
+                                    <p className={ComponentStyles.form.error}>
+                                        {form.formState.errors.shippingAddress.country.message}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={ComponentStyles.checkout.section.container}>
                     <h2 className={ComponentStyles.checkout.section.title}>{t('paymentMethod')}</h2>
                     <div className={ComponentStyles.checkout.section.content}>
                         {paymentMethods.filter(pm => pm.isAvailable).map((method) => (
@@ -138,6 +255,11 @@ export default function CheckoutForm({ orderId, paymentMethods, deliveryMethods 
                                 </div>
                             </label>
                         ))}
+                        {form.formState.errors.paymentMethodId && (
+                            <p className={ComponentStyles.form.error}>
+                                {form.formState.errors.paymentMethodId.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
@@ -169,17 +291,22 @@ export default function CheckoutForm({ orderId, paymentMethods, deliveryMethods 
                                 </div>
                             </label>
                         ))}
+                        {form.formState.errors.deliveryMethodId && (
+                            <p className={ComponentStyles.form.error}>
+                                {form.formState.errors.deliveryMethodId.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
                 <div className={ComponentStyles.checkout.submitButton.container}>
-                    <button
+                    <Button
                         type="submit"
-                        disabled={!selectedPaymentMethod || !selectedDeliveryMethod}
+                        disabled={!selectedPaymentMethod || !selectedDeliveryMethod || form.formState.isSubmitting}
                         className={ComponentStyles.checkout.submitButton.button}
                     >
                         {form.formState.isSubmitting ? t('processing') : t('completeOrder', { total: total.toFixed(2) })}
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

@@ -6,6 +6,7 @@ import { Order } from '../../lib/interface/Order';
 import Badge from '../UI/Badge';
 import ManageOrder from './ManageOrder';
 import { getStatusColor, getStatusIcon } from './ProfileUtils';
+import Link from 'next/link';
 
 
 
@@ -30,8 +31,10 @@ export default function OrdersPage({ orders }: { orders: Order[] }) {
                     <TranslatedText className="text-gray-500 mb-6" textTag="p">
                         You haven&apos;t placed any orders yet
                     </TranslatedText>
-                    <Button variant="primary" onClick={() => window.location.href = '/'}>
-                        <TranslatedText>order.continueShopping</TranslatedText>
+                    <Button variant="primary">
+                        <Link href="/">
+                            <TranslatedText>order.continueShopping</TranslatedText>
+                        </Link>
                     </Button>
                 </div>
             ) : (
@@ -47,7 +50,7 @@ export default function OrdersPage({ orders }: { orders: Order[] }) {
                                         <span className="font-mono text-sm">{order.id}</span>
                                     </div>
                                     <div className="text-sm text-gray-500">
-                                        {order.createdAt.toLocaleDateString()}
+                                        {new Date(order.createdAt).toLocaleDateString()}
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">

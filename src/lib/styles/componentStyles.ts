@@ -105,7 +105,7 @@ export const ComponentStyles = {
     form: {
         group: "mb-4",
         label: "block text-sm font-medium mb-2",
-        input: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+        input: "w-full px-3 py-2 border border-transparent bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
         textarea: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical",
         select: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
         checkbox: "mr-2",

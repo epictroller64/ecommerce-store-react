@@ -4,6 +4,9 @@ import { FaCheck } from 'react-icons/fa';
 import { ComponentStyles } from '../../lib/styles/componentStyles';
 import TranslatedText from '../Text';
 import Button from '../UI/Button';
+import { useCartStore } from '../../lib/stores/cartStore';
+import { useEffect } from 'react';
+import Link from 'next/link';
 
 interface OrderConfirmationProps {
     orderId: string;
@@ -13,6 +16,13 @@ interface OrderConfirmationProps {
 }
 
 export default function OrderConfirmation({ orderId, total, deliveryMethod, paymentMethod }: OrderConfirmationProps) {
+    const { clearCart } = useCartStore();
+    useEffect(() => {
+        clearCart();
+        //clear the cart as checkout is complete
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className={ComponentStyles.checkout.container}>
             <div className="text-center">
@@ -48,19 +58,20 @@ export default function OrderConfirmation({ orderId, total, deliveryMethod, paym
 
                 <div className="mt-8 space-y-4">
                     <TranslatedText className="text-gray-600" textTag='p'>order.orderConfirmedDescription</TranslatedText>
-
                     <div className="flex justify-center space-x-4">
                         <Button
                             variant='primary'
-                            onClick={() => window.location.href = '/'}
                         >
-                            <TranslatedText>order.continueShopping</TranslatedText>
+                            <Link href="/">
+                                <TranslatedText>order.continueShopping</TranslatedText>
+                            </Link>
                         </Button>
                         <Button
                             variant='outline'
-                            onClick={() => window.location.href = '/orders'}
                         >
-                            <TranslatedText>order.viewOrders</TranslatedText>
+                            <Link href="/profile/orders">
+                                <TranslatedText>order.viewOrders</TranslatedText>
+                            </Link>
                         </Button>
                     </div>
                 </div>
