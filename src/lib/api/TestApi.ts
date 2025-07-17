@@ -5,6 +5,7 @@ import { ProductWithVariants } from "../interface/Products";
 import { SiteConfig } from "../interface/SiteConfig";
 import { PaymentMethodResponse } from "../interface/PaymentMethod";
 import { DeliveryMethodResponse } from "../interface/DeliveryMethod";
+import { Review } from "../interface/Review";
 import { exampleConfig } from "./config";
 import { User } from "../interface/User";
 
@@ -41,6 +42,8 @@ type ApiMethods = {
     "get-delivery-methods": () => Promise<ApiResponse<DeliveryMethodResponse>>;
     "get-user": () => Promise<ApiResponse<User>>;
     "complete-checkout": () => Promise<ApiResponse<CompleteCheckoutResponse>>;
+    "get-product-reviews": () => Promise<ApiResponse<Review[]>>;
+    "create-review": () => Promise<ApiResponse<Review>>;
 };
 
 export const TestApi: ApiMethods = {
@@ -223,7 +226,7 @@ export const TestApi: ApiMethods = {
                 name: "Premium Wireless Headphones",
                 description: "High-quality wireless headphones with noise cancellation and premium sound quality. Perfect for music lovers and professionals alike.",
                 category: "Electronics",
-                rating: 4.8,
+                rating: "4.8",
                 reviewCount: 156,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -256,7 +259,7 @@ export const TestApi: ApiMethods = {
                 name: "Smart Fitness Watch",
                 description: "Advanced fitness tracking with heart rate monitoring, GPS, and 7-day battery life. Perfect for athletes and health enthusiasts.",
                 category: "Electronics",
-                rating: 4.6,
+                rating: "4.6",
                 reviewCount: 89,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -294,7 +297,7 @@ export const TestApi: ApiMethods = {
                     category: "Electronics",
                     inStock: true,
                     stockQuantity: 50,
-                    rating: 4.5,
+                    rating: "4.5",
                     reviewCount: 12,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -372,7 +375,7 @@ export const TestApi: ApiMethods = {
                     images: ["https://prd.place/400", "https://prd.place/400"],
                     category: "electronics",
                     inStock: true,
-                    rating: 4.5,
+                    rating: "4.5",
                     reviewCount: 12,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -387,7 +390,7 @@ export const TestApi: ApiMethods = {
                     images: ["https://prd.place/400", "https://prd.place/400"],
                     category: "clothing",
                     inStock: false,
-                    rating: 3.8,
+                    rating: "3.8",
                     reviewCount: 8,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -437,6 +440,48 @@ export const TestApi: ApiMethods = {
                 },
             },
         }, "Site information retrieved successfully"));
+    },
+    "get-product-reviews": async () => {
+        return Promise.resolve(createSuccessResponse([
+            {
+                id: "review-1",
+                productId: "prod-1",
+                userId: "user-123",
+                rating: 5,
+                comment: "Great headphones! Very comfortable and sound quality is amazing.",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+            {
+                id: "review-2",
+                productId: "prod-1",
+                userId: "user-456",
+                rating: 4,
+                comment: "Good but could be better. The noise cancellation is decent.",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+            {
+                id: "review-3",
+                productId: "prod-2",
+                userId: "user-789",
+                rating: 3,
+                comment: "Average product. The battery life is decent but the GPS tracking is not accurate.",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            }
+        ], "Product reviews retrieved successfully"));
+    },
+    "create-review": async () => {
+        return Promise.resolve(createSuccessResponse({
+            id: "review-4",
+            productId: "prod-1",
+            userId: "user-123",
+            rating: 5,
+            comment: "Excellent headphones! Perfect for music and calls.",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        }, "Review created successfully"));
     }
 };
 

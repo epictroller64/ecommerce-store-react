@@ -2,12 +2,13 @@ import { ApiResponse, AuthResponse, CompleteCheckoutResponse, ProductsResponse }
 import { Category } from "../interface/Category"
 import { Order } from "../interface/Order"
 import { ProductWithVariants, ProductFilters } from "../interface/Products"
-import { CompleteCheckoutRequest, CreateOrderRequest, LoginRequest, RegisterRequest, UpdateUserSettingsRequest } from "../interface/Request"
+import { CompleteCheckoutRequest, CreateOrderRequest, LoginRequest, RegisterRequest, UpdateUserSettingsRequest, CreateReviewRequest } from "../interface/Request"
 import { SiteConfig } from "../interface/SiteConfig"
 import { SiteInfo } from "../interface/SiteInfo"
 import { User } from "../interface/User"
 import { PaymentMethod } from "../interface/PaymentMethod"
 import { DeliveryMethod } from "../interface/DeliveryMethod"
+import { Review } from "../interface/Review"
 import { Path, TestApi } from "./TestApi"
 import { getAuthToken } from "./utils"
 
@@ -36,6 +37,8 @@ export const LocalApi = {
     getDeliveryMethods: () => get<DeliveryMethod[]>("delivery-methods/get-delivery-methods"),
     completeCheckout: (request: CompleteCheckoutRequest) => post<CompleteCheckoutResponse>("checkout/complete-checkout", request),
     updateUserSettings: (request: UpdateUserSettingsRequest) => post<User>("users/update-user-settings", request),
+    getProductReviews: (productId: string) => get<Review[]>("reviews/get-product-reviews", { productId }),
+    createReview: (request: CreateReviewRequest) => post<Review>("reviews/create-review", request),
 }
 
 async function post<T, Req = unknown>(path: string, body: Req | FormData) {

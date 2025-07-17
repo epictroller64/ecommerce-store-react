@@ -69,3 +69,10 @@ export const updateUserSettingsSchema = z.object({
     message: "Passwords do not match",
     path: ["confirmPassword"],
 });
+
+
+export const createReviewSchema = z.object({
+    productId: z.string().uuid("Invalid product ID"),
+    rating: z.number().int().min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),
+    comment: z.string().optional(),
+});

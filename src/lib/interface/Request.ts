@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { completeCheckoutSchema, createOrderSchema, updateUserSettingsSchema } from "../schemas/zodSchemas"
+import { completeCheckoutSchema, createOrderSchema, updateUserSettingsSchema, createReviewSchema } from "../schemas/zodSchemas"
 
 export interface LoginRequest {
     email: string
@@ -23,3 +23,4 @@ interface Pagination {
 export type CreateOrderRequest = z.infer<typeof createOrderSchema>
 export type CompleteCheckoutRequest = z.infer<typeof completeCheckoutSchema>
 export type UpdateUserSettingsRequest = z.infer<typeof updateUserSettingsSchema>
+export type CreateReviewRequest = z.infer<typeof createReviewSchema>

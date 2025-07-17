@@ -1,23 +1,39 @@
 'use client'
 import { useEffect, useState } from "react";
 import { ProductWithVariants, Variant } from "../../lib/interface/Products";
+import { User } from "../../lib/interface/User";
 import { Gallery } from "./ProductGallery";
 import { ProductStars, ReviewCount } from "./ProductStars";
 import { VariantSelector } from "./VariantSelector";
 import ErrorDisplay from "../Error/Error";
 import { useTranslations } from "../../lib/hooks/useTranslations";
+import ReviewList from "../Reviews/ReviewList";
+import ReviewForm from "../Reviews/ReviewForm";
 
-export default function ProductPageClient({ productData }: { productData: ProductWithVariants }) {
+interface ProductPageClientProps {
+    productData: ProductWithVariants;
+    user?: User;
+}
+
+export default function ProductPageClient({ productData, user }: ProductPageClientProps) {
     const [selectedVariant, setSelectedVariant] = useState<Variant>(productData.variants[0]);
     const { t } = useTranslations();
     const [loaded, setLoaded] = useState(false);
+    const [refreshReviews, setRefreshReviews] = useState(0);
+
     useEffect(() => {
         setLoaded(true);
     }, []);
+
+    const handleReviewSubmitted = () => {
+        setRefreshReviews(prev => prev + 1);
+    };
+
     if (!loaded) {
         // avoid hydration error
         return <ErrorDisplay message={t('loading')} />
     }
+
     return <>
         <Gallery variant={selectedVariant} />
         <div className="space-y-6">
@@ -55,5 +71,24 @@ export default function ProductPageClient({ productData }: { productData: Produc
                     )}
                 </dl>
             </div>
-        </div></>
+
+            <div className="border-t pt-6">
+                <ReviewList key={refreshReviews} productId={productData.id} />
+                {user ? (
+                    <ReviewForm productId={productData.id} onReviewSubmitted={handleReviewSubmitted} />
+                ) : (
+                    <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Write a Review</h3>
+                        <p className="text-gray-600 mb-4">Please log in to share your thoughts about this product.</p>
+                        <a
+                            href="/authentication"
+                            className="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                        >
+                            Log In to Review
+                        </a>
+                    </div>
+                )}
+            </div>
+        </div>
+    </>
 }
